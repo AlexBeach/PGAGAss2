@@ -1,16 +1,12 @@
-
 #include <SDL.h>
-
 #include "glew.h"
-
 #include <iostream>
+#include "ObjectLoader.h"
 
 // The GLM library contains vector and matrix functions and classes for us to use
 // They are designed to easily work with OpenGL!
 #include <glm.hpp> // This is the main GLM header
 #include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations
-
-#include "GameModel.h"
 
 
 // An initialisation function, mainly for GLEW
@@ -125,9 +121,10 @@ int main(int argc, char *argv[])
 	glEnable(GL_DEPTH_TEST);
 
 	// Create a model
-	GameModel *myObject = new GameModel();
+	//GameModel *myObject = new GameModel();
+	ObjectLoader *Object = new ObjectLoader("Sphere.obj");
 	// Set object's position like this:
-	myObject->SetPosition(0,0,0);
+	//myObject->SetPosition(0,0,0);
 
 
 	// We are now preparing for our main loop (also known as the 'game loop')
@@ -214,7 +211,7 @@ int main(int argc, char *argv[])
 		lastTime = current;
 		
 		// Update the model, to make it rotate
-		myObject->Update( deltaTs );
+		//Object->Update( deltaTs );
 
 
 
@@ -236,7 +233,7 @@ int main(int argc, char *argv[])
 		glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,-2.5f) );
 
 		// Draw the object using the given view (which contains the camera orientation) and projection (which contains information about the camera 'lense')
-		myObject->Draw( View, Projection);
+		Object->Draw( View, Projection);
 
 
 		// This tells the renderer to actually show its contents to the screen
