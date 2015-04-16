@@ -8,6 +8,32 @@
 #include <glm.hpp> // This is the main GLM header
 #include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations
 
+// An initialisation function, mainly for GLEW
+// This will also print to console the version of OpenGL we are using
+bool InitGL()
+{
+	// GLEW has a problem with loading core OpenGL
+	// See here: https://www.opengl.org/wiki/OpenGL_Loading_Library
+	// The temporary workaround is to enable its 'experimental' features
+	glewExperimental = GL_TRUE;
+
+	GLenum err = glewInit();
+	if( GLEW_OK != err )
+	{
+		/* Problem: glewInit failed, something is seriously wrong. */
+		std::cerr<<"Error: GLEW failed to initialise with message: "<< glewGetErrorString(err) <<std::endl;
+		return false;
+	}
+	std::cout<<"INFO: Using GLEW "<< glewGetString(GLEW_VERSION)<<std::endl;
+
+	std::cout<<"INFO: OpenGL Vendor: "<< glGetString( GL_VENDOR ) << std::endl;
+	std::cout<<"INFO: OpenGL Renderer: "<< glGetString( GL_RENDERER ) << std::endl;
+	std::cout<<"INFO: OpenGL Version: "<< glGetString( GL_VERSION ) << std::endl;
+	std::cout<<"INFO: OpenGL Shading Language Version: "<< glGetString( GL_SHADING_LANGUAGE_VERSION ) << std::endl;
+
+	return true;
+}
+
 int main(int argc, char *argv[])
 {
 	// We are going to work out how much time passes from frame to frame
@@ -28,16 +54,16 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	// Call our initialisation function to set up GLEW and print out some GL info to console
+	if(!InitGL())
+	{
+		return -1;
+	}
+
 	application *App = new application();
 
 	App->Init();
 
-	// Call our initialisation function to set up GLEW and print out some GL info to console
-	if(!App->InitGL())
-	{
-		return -1;
-	}
-	
 	// We are now preparing for our main loop (also known as the 'game loop')
 	// This loop will keep going round until we exit from our program by changing the bool 'go' to the value false
 	// Within this loop we generally do the following things:
@@ -72,7 +98,6 @@ int main(int argc, char *argv[])
 			SDL_Delay((unsigned int) (((1.0f/50.0f) - deltaTs)*1000.0f) );
 		}
 	}
-
 	// If we get outside the main game loop, it means our user has requested we exit
 
 	return 0;

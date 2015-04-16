@@ -1,40 +1,11 @@
 #include "application.h"
 
-// An initialisation function, mainly for GLEW
-// This will also print to console the version of OpenGL we are using
-bool application::InitGL()
-{
-	// GLEW has a problem with loading core OpenGL
-	// See here: https://www.opengl.org/wiki/OpenGL_Loading_Library
-	// The temporary workaround is to enable its 'experimental' features
-	glewExperimental = GL_TRUE;
-
-	GLenum err = glewInit();
-	if( GLEW_OK != err )
-	{
-		/* Problem: glewInit failed, something is seriously wrong. */
-		std::cerr<<"Error: GLEW failed to initialise with message: "<< glewGetErrorString(err) <<std::endl;
-		return false;
-	}
-	std::cout<<"INFO: Using GLEW "<< glewGetString(GLEW_VERSION)<<std::endl;
-
-	std::cout<<"INFO: OpenGL Vendor: "<< glGetString( GL_VENDOR ) << std::endl;
-	std::cout<<"INFO: OpenGL Renderer: "<< glGetString( GL_RENDERER ) << std::endl;
-	std::cout<<"INFO: OpenGL Version: "<< glGetString( GL_VERSION ) << std::endl;
-	std::cout<<"INFO: OpenGL Shading Language Version: "<< glGetString( GL_SHADING_LANGUAGE_VERSION ) << std::endl;
-
-	return true;
-}
-
 application::application(void)
 {
 	winPosX = 100;
 	winPosY = 100;
 	winWidth = 640;
 	winHeight = 480;
-
-	Object = new ObjectLoader("Sphere.obj");
-	//myObject->SetPosition(0,0,0);
 
 	GameInput = new input();
 }
@@ -98,6 +69,9 @@ void application::Init()
 
 	// Enable the depth test to make sure triangles in front are always in front no matter the order they are drawn
 	glEnable(GL_DEPTH_TEST);
+
+	Object = new ObjectLoader("Sphere.obj");
+	//myObject->SetPosition(0,0,0);
 }
 
 bool application::Update(int dt)
@@ -107,7 +81,7 @@ bool application::Update(int dt)
 	// Update the model, to make it rotate
 	//Object->Update( dt );
 
-	return GameInput->getQuit();
+	return 1;//GameInput->getQuit();
 }
 
 void application::Draw()

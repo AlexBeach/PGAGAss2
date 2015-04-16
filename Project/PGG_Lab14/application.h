@@ -17,7 +17,6 @@ public:
 	application(void);
 	~application(void);
 
-	bool InitGL(void);
 	void Init();
 	bool Update(int dt);
 	void Draw(void);
