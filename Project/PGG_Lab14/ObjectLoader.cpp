@@ -12,11 +12,12 @@ ObjectLoader::ObjectLoader(std::string filename)
 	numVertices = 0;
 
 	LoadObject(filename);
-	//CreateVAO();
+	CreateVAO();
 
-	position = glm::vec3(0, -5, -10);
+	//position = glm::vec3(0, -5, -10);
 
 	shader = new Shader();
+	shader->InitialiseShaders();
 }
 
 ObjectLoader::~ObjectLoader(void)
@@ -164,6 +165,8 @@ void ObjectLoader::LoadObject(std::string filename)
 
     // variable to tell OpenGL how many vertices to draw
     numVertices = vertices.size();
+
+	    std::cout << "Successfully loaded file: '" << filename << "'" << std::endl;
 }
 
 void ObjectLoader::CreateVAO()

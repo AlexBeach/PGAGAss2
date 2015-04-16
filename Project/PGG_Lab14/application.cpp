@@ -126,7 +126,7 @@ void application::Draw()
 	glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,-2.5f) );
 
 	// Draw the object using the given view (which contains the camera orientation) and projection (which contains information about the camera 'lense')
-	//Object->Draw(View, Projection);
+	Object->Draw(View, Projection);
 
 	// This tells the renderer to actually show its contents to the screen
 	// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P
