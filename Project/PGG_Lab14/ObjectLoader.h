@@ -18,7 +18,7 @@ public:
 	void Update(glm::vec3 pos, glm::vec3 rot, float deltaTs);
 
 	/// Draws object using the given camera view and projection matrices
-	void Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix /*, Shader *shader */);
+	void Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix);
 
 protected:
 
