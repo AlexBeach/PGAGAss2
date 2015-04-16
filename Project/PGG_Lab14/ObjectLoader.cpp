@@ -12,7 +12,7 @@ ObjectLoader::ObjectLoader(std::string filename)
 	numVertices = 0;
 
 	LoadObject(filename);
-	CreateVAO();
+	//CreateVAO();
 
 	position = glm::vec3(0, -5, -10);
 
@@ -169,7 +169,7 @@ void ObjectLoader::LoadObject(std::string filename)
 void ObjectLoader::CreateVAO()
 {
 	// Creates one VAO
-	glGenVertexArrays( 1, &VAO );
+	glGenVertexArrays(1, &VAO);
 	// 'Binding' something makes it the current one we are using
 	// This is like activating it, so that subsequent function calls will work on this item
 	glBindVertexArray( VAO );
@@ -222,7 +222,7 @@ void ObjectLoader::Update(glm::vec3 pos, glm::vec3 rot, float deltaTs)
 
 }
 
-void ObjectLoader::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix /*, Shader *shader */)
+void ObjectLoader::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
 	// Ok, here I like to indent drawing calls - it's just a personal style, you may not like it and that's fine ;)
 	// Generally you will need to be activating and deactivating OpenGL states
@@ -230,7 +230,7 @@ void ObjectLoader::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix /*, Shader *s
 	// This can help when things get more complex
 
 	// Activate the shader program
-	glUseProgram( shader->Program() );
+	glUseProgram(shader->Program());
 
 		// Activate the VAO
 		glBindVertexArray( VAO );
