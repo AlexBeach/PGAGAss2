@@ -25,6 +25,7 @@ bool CheckShaderCompiled( GLint shader )
 
 Shader::Shader(void)
 {
+	program = 0;
 	ModelMatLocation = ViewMatLocation = ProjMatLocation = 0;
 	program = 0;
 
