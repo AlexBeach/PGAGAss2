@@ -22,7 +22,7 @@ bool InitGL()
 	{
 		/* Problem: glewInit failed, something is seriously wrong. */
 		std::cerr<<"Error: GLEW failed to initialise with message: "<< glewGetErrorString(err) <<std::endl;
-		return false;
+		//return false;
 	}
 	std::cout<<"INFO: Using GLEW "<< glewGetString(GLEW_VERSION)<<std::endl;
 
