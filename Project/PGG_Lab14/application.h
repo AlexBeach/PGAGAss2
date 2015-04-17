@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include "glew.h"
 #include <iostream>
-#include "GameEntity.h"
+#include "ObjectLoader.h"
 #include "input.h"
 
 // The GLM library contains vector and matrix functions and classes for us to use
@@ -17,9 +17,7 @@ public:
 	application(void);
 	~application(void);
 
-	//bool InitGL(void);
 	void Init();
-	void InitEntities(void);
 	bool Update(int dt);
 	void Draw(void);
 
@@ -30,11 +28,9 @@ private:
 	SDL_Renderer *renderer;
 	SDL_GLContext glcontext;
 
-	// call the input class to contrust object for managing game input in this game
+	// Create a model
+	ObjectLoader *Object;
 	input *GameInput;
-
-	//call the game entity class to create a game entity, in this case a pool ball
-	GameEntity *PoolBall1;
 
 	// Here we are going to check for any input events
 	// Basically when you press the keyboard or move the mouse, the parameters are stored as something called an 'event'

@@ -54,16 +54,15 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	application *App = new application();
-
 	// Call our initialisation function to set up GLEW and print out some GL info to console
 	if(!InitGL())
 	{
 		return -1;
 	}
 
+	application *App = new application();
+
 	App->Init();
-	App->InitEntities();
 
 	// We are now preparing for our main loop (also known as the 'game loop')
 	// This loop will keep going round until we exit from our program by changing the bool 'go' to the value false
