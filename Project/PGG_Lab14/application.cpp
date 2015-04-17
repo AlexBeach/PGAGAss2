@@ -34,14 +34,12 @@ void application::Init()
 	// We'll go for the core profile
 	// This means we are using the latest version and cannot use the deprecated functions
 	SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
-
 	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 	
 	// Now we have got SDL initialised, we are ready to create a window!
 	// These are some variables to help show you what the parameters are for this function
 	// You can experiment with the numbers to see what they do
-
 	window = SDL_CreateWindow("My Window!!!",  // The first parameter is the window title
 		winPosX, winPosY,
 		winWidth, winHeight,
@@ -69,8 +67,11 @@ void application::Init()
 
 	// Enable the depth test to make sure triangles in front are always in front no matter the order they are drawn
 	glEnable(GL_DEPTH_TEST);
+}
 
-	Object = new ObjectLoader("Sphere.obj");
+void application::InitEntities(void)
+{
+	PoolBall1 = new GameEntity();
 	//myObject->SetPosition(0,0,0);
 }
 
@@ -79,7 +80,7 @@ bool application::Update(int dt)
 	GameInput->GameInputs(incomingEvent);
 	
 	// Update the model, to make it rotate
-	//Object->Update( dt );
+	//Object->Update(dt);
 
 	return 1;//GameInput->getQuit();
 }
@@ -99,8 +100,7 @@ void application::Draw()
 	// You can think of this as moving the world away from the camera
 	glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,-2.5f) );
 
-	// Draw the object using the given view (which contains the camera orientation) and projection (which contains information about the camera 'lense')
-	Object->Draw(View, Projection);
+	PoolBall1->Draw(View, Projection);
 
 	// This tells the renderer to actually show its contents to the screen
 	// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P
