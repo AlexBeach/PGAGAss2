@@ -1,5 +1,8 @@
 #include "application.h"
 
+#include <gtc/type_ptr.hpp>
+#include <gtc/matrix_transform.hpp>
+
 application::application(void)
 {
 	winPosX = 100;
@@ -26,21 +29,21 @@ void application::Init()
 	// Anyway, we basically first say which version of OpenGL we want to use
 	// So let's say 4.3:
 	// Major version number (4):
-	SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 4 );
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	// Minor version number (3):
-	SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 3 );
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	// Then we say whether we want the core profile or the compatibility profile
 	// Flag options are either: SDL_GL_CONTEXT_PROFILE_CORE   or   SDL_GL_CONTEXT_PROFILE_COMPATIBILITY
 	// We'll go for the core profile
 	// This means we are using the latest version and cannot use the deprecated functions
-	SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
-	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	
 	// Now we have got SDL initialised, we are ready to create a window!
 	// These are some variables to help show you what the parameters are for this function
 	// You can experiment with the numbers to see what they do
-	window = SDL_CreateWindow("My Window!!!",  // The first parameter is the window title
+	window = SDL_CreateWindow("His Name is Robert POOLson",  // The first parameter is the window title
 		winPosX, winPosY,
 		winWidth, winHeight,
 		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -71,24 +74,29 @@ void application::Init()
 
 void application::InitEntities(void)
 {
-	PoolBall1 = new GameEntity();
-	//myObject->SetPosition(0,0,0);
+	PoolBall1 = new PoolBall("Sphere.obj");
+	//Cue = new PoolCue("PoolCue.obj");
 }
 
 bool application::Update(int dt)
 {
 	GameInput->GameInputs(incomingEvent);
-	
-	// Update the model, to make it rotate
-	//Object->Update(dt);
 
-	return 1;//GameInput->getQuit();
+	if(GameInput->getQuit()==true)
+	{
+		return true;
+	}
+
+	PoolBall1->Update(dt);
+	//Cue->Update(dt);
+
+	return false;
 }
 
 void application::Draw()
 {
 	// Specify the colour to clear the framebuffer to
-	glClearColor(0.0f,0.0f,0.0f,0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	// This writes the above colour to the colour part of the framebuffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -98,9 +106,10 @@ void application::Draw()
 	// Create a viewing matrix for the camera
 	// Don't forget, this is the opposite of where the camera actually is
 	// You can think of this as moving the world away from the camera
-	glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,-2.5f) );
+	glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,-2.5f));
 
 	PoolBall1->Draw(View, Projection);
+	//Cue->Draw(View, Projection);
 
 	// This tells the renderer to actually show its contents to the screen
 	// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P

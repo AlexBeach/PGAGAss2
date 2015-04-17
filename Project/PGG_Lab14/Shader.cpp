@@ -1,6 +1,7 @@
 #include "Shader.h"
 
 #include <iostream>
+#include <gtc/type_ptr.hpp>
 #include <gtc/matrix_transform.hpp>
 
 bool CheckShaderCompiled( GLint shader )

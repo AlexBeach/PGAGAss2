@@ -7,20 +7,16 @@
 #include "glew.h"
 #include "Shader.h"
 #include "ObjectLoader.h"
+#include "wglew.h"
 
-// The GLM library contains vector and matrix functions and classes for us to use
-// They are designed to easily work with OpenGL
-#include <glm.hpp> // This is the main GLM header
-#include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations
-
-class GameEntity
+class PoolBall
 {
 public:
-	GameEntity(void);
-	~GameEntity(void);
+	PoolBall(std::string filename/*, glm::vec3 Pos*/);
+	~PoolBall(void);
 
 	/// Currently just updates rotation to make the model rotate
-	void Update(glm::vec3 pos, glm::vec3 rot, float deltaTs);
+	void Update(float deltaTs);
 
 	/// Draws object using the given camera view and projection matrices
 	void Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix);
@@ -29,4 +25,14 @@ private:
 
 	// Create a model
 	ObjectLoader *Object;
+
+	/// Object position vector
+	glm::vec3 position;
+
+	/// Euler angles for rotation
+	glm::vec3 rotation;
+
+	/// Object's model matrix
+	/// This is rebuilt in the update function
+	glm::mat4 modelMatrix;
 };

@@ -7,6 +7,7 @@
 #include <string>
 #include "glew.h"
 #include "Shader.h"
+#include "wglew.h"
 
 class ObjectLoader
 {
@@ -14,11 +15,10 @@ public:
 	ObjectLoader(std::string filename);
 	~ObjectLoader(void);
 
-	/// Currently just updates rotation to make the model rotate
-	void Update(glm::vec3 pos, glm::vec3 rot, float deltaTs);
-
 	/// Draws object using the given camera view and projection matrices
 	void Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix);
+
+	void setMat(glm::mat4 modMatrix);
 
 protected:
 
@@ -39,7 +39,7 @@ protected:
 
 	/// Object's model matrix
 	/// This is rebuilt in the update function
-	glm::mat4 _modelMatrix;
+	glm::mat4 modelMatrix;
 
 	/// Number of vertices in the model
 	unsigned int numVertices;

@@ -1,15 +1,13 @@
 #pragma once
 
+#include <glm.hpp>
 #include <SDL.h>
 #include "glew.h"
 #include <iostream>
-#include "GameEntity.h"
 #include "input.h"
-
-// The GLM library contains vector and matrix functions and classes for us to use
-// They are designed to easily work with OpenGL!
-#include <glm.hpp> // This is the main GLM header
-#include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations
+#include "wglew.h"
+#include "PoolBall.h"
+#include "PoolCue.h"
 
 class application
 {
@@ -33,8 +31,10 @@ private:
 	// call the input class to contrust object for managing game input in this game
 	input *GameInput;
 
-	//call the game entity class to create a game entity, in this case a pool ball
-	GameEntity *PoolBall1;
+	//call the game entity class to create pool ball
+	PoolBall *PoolBall1;
+
+	//PoolCue *Cue;
 
 	// Here we are going to check for any input events
 	// Basically when you press the keyboard or move the mouse, the parameters are stored as something called an 'event'

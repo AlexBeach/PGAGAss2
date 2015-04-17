@@ -1,8 +1,10 @@
 #pragma once
 
+#include <glm.hpp>
 #include <SDL.h>
 #include "glew.h"
 #include <iostream>
+#include "wglew.h"
 
 class input
 {

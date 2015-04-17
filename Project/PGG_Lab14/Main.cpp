@@ -1,12 +1,14 @@
 #include <SDL.h>
 #include "glew.h"
 #include <iostream>
-#include "application.h"
+#include "wglew.h"
 
 // The GLM library contains vector and matrix functions and classes for us to use
 // They are designed to easily work with OpenGL
 #include <glm.hpp> // This is the main GLM header
 #include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations
+
+#include "application.h"
 
 // An initialisation function, mainly for GLEW
 // This will also print to console the version of OpenGL we are using
@@ -22,7 +24,7 @@ bool InitGL()
 	{
 		/* Problem: glewInit failed, something is seriously wrong. */
 		std::cerr<<"Error: GLEW failed to initialise with message: "<< glewGetErrorString(err) <<std::endl;
-		//return false;
+		return false;
 	}
 	std::cout<<"INFO: Using GLEW "<< glewGetString(GLEW_VERSION)<<std::endl;
 
@@ -36,11 +38,6 @@ bool InitGL()
 
 int main(int argc, char *argv[])
 {
-	// We are going to work out how much time passes from frame to frame
-	// We will use this variable to store the time at our previous frame
-	// This function returns the number of milliseconds since SDL was initialised
-	unsigned int lastTime = SDL_GetTicks();
-
 	// SDL_Init is the main initialisation function for SDL
 	// It takes a 'flag' parameter which we use to tell SDL what systems we're going to use
 	// Here, we want to use SDL's video system, so we give it the flag for this
@@ -54,15 +51,21 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	// We are going to work out how much time passes from frame to frame
+	// We will use this variable to store the time at our previous frame
+	// This function returns the number of milliseconds since SDL was initialised
+	unsigned int lastTime = SDL_GetTicks();
+
 	application *App = new application();
 
+	App->Init();
+	
 	// Call our initialisation function to set up GLEW and print out some GL info to console
 	if(!InitGL())
 	{
 		return -1;
 	}
 
-	App->Init();
 	App->InitEntities();
 
 	// We are now preparing for our main loop (also known as the 'game loop')
@@ -71,8 +74,8 @@ int main(int argc, char *argv[])
 	//   * Check for input from the user (and do something about it)
 	//   * Update our world
 	//   * Draw our world
-	bool Go = true;
-	while(Go)
+	bool Quit = false;
+	while(Quit==false)
 	{
 		// We are going to work out the time between each frame now
 		// First, find the current time
@@ -88,7 +91,7 @@ int main(int argc, char *argv[])
 		lastTime = current;
 
 		// Update our world
-		Go = App->Update(deltaTs);
+		Quit = App->Update(deltaTs);
 		
 		// Draw our world
 		App->Draw();

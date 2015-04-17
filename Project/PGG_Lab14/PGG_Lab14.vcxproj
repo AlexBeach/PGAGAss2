@@ -81,19 +81,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="application.cpp" />
-    <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="glew.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ObjectLoader.cpp" />
+    <ClCompile Include="PoolBall.cpp" />
+    <ClCompile Include="PoolCue.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application.h" />
-    <ClInclude Include="GameEntity.h" />
     <ClInclude Include="glew.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="ObjectLoader.h" />
+    <ClInclude Include="PoolBall.h" />
+    <ClInclude Include="PoolCue.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="wglew.h" />
   </ItemGroup>

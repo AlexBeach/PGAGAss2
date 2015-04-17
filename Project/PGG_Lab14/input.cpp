@@ -1,5 +1,8 @@
 #include "input.h"
 
+#include <gtc/type_ptr.hpp>
+#include <gtc/matrix_transform.hpp>
+
 input::input(void)
 {
 	Quit = Up = Down = Left = Right = Power = false;
@@ -52,6 +55,8 @@ void input::GameInputs(SDL_Event Event)
 					case SDLK_RIGHT:
 					case SDLK_d:	Right = true;
 						break;
+					case SDLK_ESCAPE:	Quit = true;
+						break;
 				}
 				break;
 
@@ -72,6 +77,8 @@ void input::GameInputs(SDL_Event Event)
 						break;
 					case SDLK_RIGHT:
 					case SDLK_d:	Right = false;
+						break;
+					case SDLK_ESCAPE:	Quit = false;
 						break;
 				}
 				break;

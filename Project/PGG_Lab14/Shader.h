@@ -3,6 +3,7 @@
 #include <glm.hpp>
 #include <SDL.h>
 #include "glew.h"
+#include "wglew.h"
 
 class Shader
 {

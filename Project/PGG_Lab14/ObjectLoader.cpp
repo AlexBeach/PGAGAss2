@@ -14,8 +14,6 @@ ObjectLoader::ObjectLoader(std::string filename)
 	LoadObject(filename);
 	CreateVAO();
 
-	//position = glm::vec3(0, -5, -10);
-
 	shader = new Shader();
 	shader->InitialiseShaders();
 }
@@ -220,37 +218,35 @@ void ObjectLoader::CreateVAO()
 	//glDisableVertexAttribArray(0);
 }
 
-void ObjectLoader::Update(glm::vec3 pos, glm::vec3 rot, float deltaTs)
-{
-
-}
-
 void ObjectLoader::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
 	// Ok, here I like to indent drawing calls - it's just a personal style, you may not like it and that's fine ;)
 	// Generally you will need to be activating and deactivating OpenGL states
 	// I just find it visually easier if the activations / deactivations happen at different tab depths
 	// This can help when things get more complex
-
 	// Activate the shader program
 	glUseProgram(shader->Program());
 
 		// Activate the VAO
-		glBindVertexArray( VAO );
+		glBindVertexArray(VAO);
 
 			// Send matrices to the shader as uniforms like this:
-		glUniformMatrix4fv( shader->ModelMat(), 1, GL_FALSE, glm::value_ptr(_modelMatrix) );
+		glUniformMatrix4fv(shader->ModelMat(), 1, GL_FALSE, glm::value_ptr(modelMatrix) );
 		glUniformMatrix4fv(shader->ViewMat(), 1, GL_FALSE, glm::value_ptr(viewMatrix) );
 		glUniformMatrix4fv(shader->ProjMat(), 1, GL_FALSE, glm::value_ptr(projMatrix) );
-
 
 			// Tell OpenGL to draw it
 			// Must specify the type of geometry to draw and the number of vertices
 			glDrawArrays(GL_TRIANGLES, 0, numVertices);
 			
 		// Unbind VAO
-		glBindVertexArray( 0 );
+		glBindVertexArray(0);
 	
 	// Technically we can do this, but it makes no real sense because we must always have a valid shader program to draw geometry
-	glUseProgram( 0 );
+	glUseProgram(0);
+}
+
+void ObjectLoader::setMat(glm::mat4 modMatrix)
+{
+	modelMatrix = modMatrix;
 }
