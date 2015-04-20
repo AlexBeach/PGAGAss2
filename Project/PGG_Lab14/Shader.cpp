@@ -4,6 +4,7 @@
 #include <gtc/type_ptr.hpp>
 #include <gtc/matrix_transform.hpp>
 
+// Useful little function to just check for compiler errors
 bool CheckShaderCompiled( GLint shader )
 {
 	GLint compiled;

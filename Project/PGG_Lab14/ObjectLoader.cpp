@@ -218,10 +218,10 @@ void ObjectLoader::CreateVAO()
 	//glDisableVertexAttribArray(0);
 }
 
-void ObjectLoader::Update(glm::vec3 pos, glm::vec3 rot, float scale)
+void ObjectLoader::Update(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale)
 {
 	modelMatrix = glm::translate(glm::mat4(1.0f), pos);
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(scale, scale, scale));
+	modelMatrix = glm::scale(modelMatrix, scale);
 	modelMatrix = glm::rotate(modelMatrix, rot.x, glm::vec3(1,0,0));
 	modelMatrix = glm::rotate(modelMatrix, rot.y, glm::vec3(0,1,0));
 	modelMatrix = glm::rotate(modelMatrix, rot.z, glm::vec3(0,0,1));
@@ -240,9 +240,9 @@ void ObjectLoader::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
 		glBindVertexArray(VAO);
 
 			// Send matrices to the shader as uniforms like this:
-		glUniformMatrix4fv(shader->ModelMat(), 1, GL_FALSE, glm::value_ptr(modelMatrix) );
-		glUniformMatrix4fv(shader->ViewMat(), 1, GL_FALSE, glm::value_ptr(viewMatrix) );
-		glUniformMatrix4fv(shader->ProjMat(), 1, GL_FALSE, glm::value_ptr(projMatrix) );
+		glUniformMatrix4fv(shader->ModelMat(), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+		glUniformMatrix4fv(shader->ViewMat(), 1, GL_FALSE, glm::value_ptr(viewMatrix));
+		glUniformMatrix4fv(shader->ProjMat(), 1, GL_FALSE, glm::value_ptr(projMatrix));
 
 			// Tell OpenGL to draw it
 			// Must specify the type of geometry to draw and the number of vertices

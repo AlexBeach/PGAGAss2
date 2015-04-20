@@ -9,22 +9,12 @@ void GameEntity::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
 	Object->Draw(viewMatrix, projMatrix);
 }
 
-void GameEntity::setPos(glm::vec3 Pos)
-{
-	position=Pos;
-}
-
-glm::vec3 GameEntity::getPos(void)
-{
-	return position;
-}
-
 void GameEntity::AttachMesh(ObjectLoader* mesh)
 {
 	Object = mesh;
 }
 
-void GameEntity::UpdateMatrix(glm::vec3 pos, glm::vec3 rot, float scale)
+void GameEntity::UpdateMatrix()
 {
-	Object->Update(pos, rot, scale);
+	Object->Update(position, rotation, scale);
 }

@@ -13,17 +13,17 @@ input::~input(void)
 
 }
 
-void input::GameInputs(SDL_Event Event)
+void input::GameInputs()
 {
 	// SDL_PollEvent will check if there is an event in the queue
 	// If there's nothing in the queue it won't sit and wait around for an event to come along (there are functions which do this, and that can be useful too!)
 	// For an empty queue it will simply return 'false'
 	// If there is an event, the function will return 'true' and it will fill the 'incomingEvent' we have given it as a parameter with the event data
-	while(SDL_PollEvent(&Event))
+	while(SDL_PollEvent(&incomingEvent))
 	{
 		// If we get in here, we have an event and need to figure out what to do with it
 		// For now, we will just use a switch based on the event's type
-		switch(Event.type)
+		switch(incomingEvent.type)
 		{
 			case SDL_QUIT:
 				// The event type is SDL_QUIT
@@ -41,7 +41,7 @@ void input::GameInputs(SDL_Event Event)
 				// The event type is SDL_KEYDOWN
 				// This means that the user has pressed a key
 				// Let's figure out which key they pressed
-				switch(Event.key.keysym.sym)
+				switch(incomingEvent.key.keysym.sym)
 				{
 					case SDLK_UP:
 					case SDLK_w:	Up = true;
@@ -64,7 +64,7 @@ void input::GameInputs(SDL_Event Event)
 				// The event type is SDL_KEYUP
 				// This means that the user has released a key
 				// Let's figure out which key they pressed
-				switch(Event.key.keysym.sym)
+				switch(incomingEvent.key.keysym.sym)
 				{
 					case SDLK_UP:
 					case SDLK_w:	Up = false;
@@ -86,32 +86,32 @@ void input::GameInputs(SDL_Event Event)
 	}
 }
 
-bool input::getQuit()
+bool input::isQuitDown()
 {
 	return Quit;
 }
 
-bool input::getUp(void)
+bool input::isUpDown(void)
 {
 	return Up;
 }
 
-bool input::getDown(void)
+bool input::isDownDown(void)
 {
 	return Down;
 }
 
-bool input::getLeft(void)
+bool input::isLeftDown(void)
 {
 	return Left;
 }
 
-bool input::getRight(void)
+bool input::isRightDown(void)
 {
 	return Right;
 }
 
-bool input::getPower(void)
+bool input::isPowerDown(void)
 {
 	return Power;
 }

@@ -4,10 +4,14 @@
 #include <glm.hpp>
 #include <SDL.h>
 #include <vector>
+
+#include <iostream>
+#include <fstream>
 #include <string>
+#include <gtc/type_ptr.hpp>
+#include <gtc/matrix_transform.hpp>
 #include "glew.h"
 #include "Shader.h"
-#include "wglew.h"
 
 class ObjectLoader
 {
@@ -16,7 +20,7 @@ public:
 	~ObjectLoader(void);
 
 	/// Currently just updates rotation to make the model rotate
-	void Update(glm::vec3 pos, glm::vec3 rot, float scale);
+	void Update(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
 
 	/// Draws object using the given camera view and projection matrices
 	void Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix);
@@ -41,8 +45,7 @@ protected:
 	/// Number of vertices in the model
 	unsigned int numVertices;
 
-	std::vector<glm::vec3> vertices;
-	std::vector<glm::vec3> normals;
+	std::vector<glm::vec3> vertices, normals;
 	std::vector<glm::vec2> UVs;
 
 	Shader *shader;

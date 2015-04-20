@@ -12,16 +12,23 @@ public:
 	input(void);
 	~input(void);
 
-	void GameInputs(SDL_Event Event);
+	void GameInputs(void);
 
-	bool getQuit(void);
-	bool getUp(void);
-	bool getDown(void);
-	bool getLeft(void);
-	bool getRight(void);
-	bool getPower(void);
+	bool isQuitDown(void);
+	bool isUpDown(void);
+	bool isDownDown(void);
+	bool isLeftDown(void);
+	bool isRightDown(void);
+	bool isPowerDown(void);
 
 private:
+
+	// Here we are going to check for any input events
+	// Basically when you press the keyboard or move the mouse, the parameters are stored as something called an 'event'
+	// SDL has a queue of events
+	// We need to check for each event and then do something about it (called 'event handling')
+	// the SDL_Event is the datatype for the event
+	SDL_Event incomingEvent;
 
 	bool Quit, Up, Down, Left, Right, Power;
 };

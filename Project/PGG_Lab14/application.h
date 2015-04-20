@@ -1,47 +1,53 @@
-#pragma once
-
-#include <glm.hpp>
-#include <SDL.h>
-#include "glew.h"
-#include <iostream>
-#include "input.h"
-#include "wglew.h"
-#include "Sphere.h"
-#include "Cube.h"
-
-class application
-{
-public:
-	application(void);
-	~application(void);
-
-	void Init();
-	void InitEntities(void);
-	bool Update(int dt);
-	void Draw(void);
-
-private:
-
-	int winPosX, winPosY, winWidth, winHeight;
-	SDL_Window *window;
-	SDL_Renderer *renderer;
-	SDL_GLContext glcontext;
-
-	// call the input class to contrust object for managing game input in this game
-	input *GameInput;
-
-	//call the game entity class to create pool ball
-	Sphere *Sphere1;
-
-	std::vector<Cube*> CubeArray;
-	Cube *Cube1;
-
-	int NumOfCubes;
-
-	// Here we are going to check for any input events
-	// Basically when you press the keyboard or move the mouse, the parameters are stored as something called an 'event'
-	// SDL has a queue of events
-	// We need to check for each event and then do something about it (called 'event handling')
-	// the SDL_Event is the datatype for the event
-	SDL_Event incomingEvent;
-};
+//#pragma once
+//
+//#include <SDL.h>
+//#include "glew.h"
+//#include <iostream>
+//#include <time.h>
+//#include <glm.hpp> // This is the main GLM header
+//#include <gtc/type_ptr.hpp>
+//#include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations
+//#include "input.h"
+//#include "Sphere.h"
+//#include "Cube.h"
+//#include "Camera.h"
+//
+//class application
+//{
+//public:
+//	application(void);
+//	~application(void);
+//
+//	void Run(void);
+//
+//protected:
+//
+//	int Init();
+//	void InitEntities(void);
+//	void Update(float dt);
+//	void Draw(float dt);
+//
+//private:
+//
+//	int winPosX, winPosY, winWidth, winHeight;
+//	SDL_Window *window;
+//	SDL_Renderer *renderer;
+//	SDL_GLContext glcontext;
+//	glm::mat4 Projection;
+//	glm::mat4 View;
+//
+//	// call the input class to contrust object for managing game input in this game
+//	input *GameInput;
+//
+//	Camera* camera;
+//
+//	//call the game entity class to create pool ball
+//	Sphere *Sphere1;
+//
+//	std::vector<Cube*> CubeArray;
+//	Cube *Cube1;
+//
+//	int NumOfCubes;
+//
+//	bool Quit;
+//};
