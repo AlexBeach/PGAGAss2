@@ -218,6 +218,15 @@ void ObjectLoader::CreateVAO()
 	//glDisableVertexAttribArray(0);
 }
 
+void ObjectLoader::Update(glm::vec3 pos, glm::vec3 rot, float scale)
+{
+	modelMatrix = glm::translate(glm::mat4(1.0f), pos);
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(scale, scale, scale));
+	modelMatrix = glm::rotate(modelMatrix, rot.x, glm::vec3(1,0,0));
+	modelMatrix = glm::rotate(modelMatrix, rot.y, glm::vec3(0,1,0));
+	modelMatrix = glm::rotate(modelMatrix, rot.z, glm::vec3(0,0,1));
+}
+
 void ObjectLoader::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
 	// Ok, here I like to indent drawing calls - it's just a personal style, you may not like it and that's fine ;)
@@ -244,9 +253,4 @@ void ObjectLoader::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
 	
 	// Technically we can do this, but it makes no real sense because we must always have a valid shader program to draw geometry
 	glUseProgram(0);
-}
-
-void ObjectLoader::setMat(glm::mat4 modMatrix)
-{
-	modelMatrix = modMatrix;
 }

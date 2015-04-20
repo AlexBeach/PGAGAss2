@@ -1,20 +1,21 @@
-#include "PoolBall.h"
+#include "Cube.h"
 
 #include <gtc/type_ptr.hpp>
 #include <gtc/matrix_transform.hpp>
 
-PoolBall::PoolBall(std::string filename/*, glm::vec3 Pos*/)
+Cube::Cube()
 {
-	Object = new ObjectLoader(filename);
-	position = glm::vec3(5, 0, -20);
+	position = glm::vec3(0, 0, 0);
+	rotation = glm::vec3(0, 0, 0);
+	scale = 1;
 }
 
-PoolBall::~PoolBall(void)
+Cube::~Cube(void)
 {
 
 }
 
-void PoolBall::Update(float deltaTs)
+void Cube::Update(float deltaTs)
 {
 	// Update the model, to make it rotate
 	// update the rotation angle of our cube
@@ -32,12 +33,8 @@ void PoolBall::Update(float deltaTs)
 	// Next, we rotate this matrix in the y-axis by the object's y-rotation:
 	modelMatrix = glm::rotate(modelMatrix, rotation.y, glm::vec3(0,1,0));
 	// And there we go, model matrix is ready
-	
-	Object->setMat(modelMatrix);
-}
 
-void PoolBall::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
-{
-	// Draw the object using the given view (which contains the camera orientation) and projection (which contains information about the camera 'lense')
-	Object->Draw(viewMatrix, projMatrix);
+	position.z-= 0.001;
+
+	UpdateMatrix(position, rotation, scale);
 }

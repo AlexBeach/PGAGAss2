@@ -15,6 +15,9 @@ public:
 	ObjectLoader(std::string filename);
 	~ObjectLoader(void);
 
+	/// Currently just updates rotation to make the model rotate
+	void Update(glm::vec3 pos, glm::vec3 rot, float scale);
+
 	/// Draws object using the given camera view and projection matrices
 	void Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix);
 
@@ -28,12 +31,6 @@ protected:
 	/// create vao
 	void CreateVAO();
 	
-	/// Object position vector
-	glm::vec3 position;
-
-	/// Euler angles for rotation
-	glm::vec3 rotation;
-
 	/// Vertex Array Object for model in OpenGL
 	GLuint VAO;
 

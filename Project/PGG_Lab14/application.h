@@ -6,8 +6,8 @@
 #include <iostream>
 #include "input.h"
 #include "wglew.h"
-#include "PoolBall.h"
-#include "PoolCue.h"
+#include "Sphere.h"
+#include "Cube.h"
 
 class application
 {
@@ -15,7 +15,6 @@ public:
 	application(void);
 	~application(void);
 
-	//bool InitGL(void);
 	void Init();
 	void InitEntities(void);
 	bool Update(int dt);
@@ -32,9 +31,12 @@ private:
 	input *GameInput;
 
 	//call the game entity class to create pool ball
-	PoolBall *PoolBall1;
+	Sphere *Sphere1;
 
-	//PoolCue *Cue;
+	std::vector<Cube*> CubeArray;
+	Cube *Cube1;
+
+	int NumOfCubes;
 
 	// Here we are going to check for any input events
 	// Basically when you press the keyboard or move the mouse, the parameters are stored as something called an 'event'

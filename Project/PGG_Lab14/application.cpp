@@ -10,13 +10,15 @@ application::application(void)
 	winWidth = 640;
 	winHeight = 480;
 
+	NumOfCubes = 100;
+
 	GameInput = new input();
 }
 
 application::~application(void)
 {
 	// Cleanup phase
-	SDL_GL_DeleteContext( glcontext );
+	SDL_GL_DeleteContext(glcontext);
 	SDL_DestroyWindow( window );
 	SDL_Quit();
 }
@@ -43,7 +45,7 @@ void application::Init()
 	// Now we have got SDL initialised, we are ready to create a window!
 	// These are some variables to help show you what the parameters are for this function
 	// You can experiment with the numbers to see what they do
-	window = SDL_CreateWindow("His Name is Robert POOLson",  // The first parameter is the window title
+	window = SDL_CreateWindow("SimpleGameForPGAG",  // The first parameter is the window title
 		winPosX, winPosY,
 		winWidth, winHeight,
 		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -74,8 +76,29 @@ void application::Init()
 
 void application::InitEntities(void)
 {
-	PoolBall1 = new PoolBall("Sphere.obj");
-	//Cue = new PoolCue("PoolCue.obj");
+	ObjectLoader *cube = new ObjectLoader("Cube.obj");
+
+	Sphere1 = new Sphere();
+	ObjectLoader *sphere = new ObjectLoader("Sphere.obj");
+	Sphere1->AttachMesh(sphere);
+	Sphere1->setPos(glm::vec3(-2, 0, -10));
+
+	float x, y, z;
+	x = -10;
+	y = -10;
+	z = -60;
+
+	for(int i=0; i<NumOfCubes; i++)
+	{
+		x+=1;
+		y+=1;
+
+		Cube1 = new Cube();
+		Cube1->AttachMesh(cube);
+		Cube1->setPos(glm::vec3(x, y, z));
+
+		CubeArray.push_back(Cube1);
+	}
 }
 
 bool application::Update(int dt)
@@ -87,8 +110,12 @@ bool application::Update(int dt)
 		return true;
 	}
 
-	PoolBall1->Update(dt);
-	//Cue->Update(dt);
+	Sphere1->Update(dt);
+
+	for(int i=0; i<CubeArray.size(); i++)
+	{
+		CubeArray[i]->Update(dt);
+	}
 
 	return false;
 }
@@ -101,15 +128,19 @@ void application::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Construct a projection matrix for the camera
-	glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+	glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 900.0f);
 
 	// Create a viewing matrix for the camera
 	// Don't forget, this is the opposite of where the camera actually is
 	// You can think of this as moving the world away from the camera
 	glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,-2.5f));
 
-	PoolBall1->Draw(View, Projection);
-	//Cue->Draw(View, Projection);
+	Sphere1->Draw(View, Projection);
+
+	for(int i=0; i<CubeArray.size(); i++)
+	{
+		CubeArray[i]->Draw(View, Projection);
+	}
 
 	// This tells the renderer to actually show its contents to the screen
 	// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P
