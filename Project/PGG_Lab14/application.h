@@ -6,9 +6,11 @@
 #include <time.h>
 #include <glm.hpp> // This is the main GLM header
 #include <gtc/type_ptr.hpp>
-#include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations
+#include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations/#include "Mesh.h"
+//#include "ObjectLoader.h"
 #include "Mesh.h"
 #include "input.h"
+#include "GameEntity.h"
 #include "Sphere.h"
 #include "Cube.h"
 #include "Camera.h"
@@ -21,14 +23,12 @@ public:
 
 	void Run(void);
 
-protected:
+private:
 
 	int Init();
 	void InitEntities(void);
 	void Update(float dt);
 	void Draw(float dt);
-
-private:
 
 	int winPosX, winPosY, winWidth, winHeight;
 	SDL_Window *window;
@@ -40,13 +40,15 @@ private:
 	// call the input class to contrust object for managing game input in this game
 	input GameInput;
 
+	Mesh* playerMesh;
+	Mesh* CubeMesh;
 	Camera* camera;
 
 	//call the game entity class to create pool ball
 	Sphere *myPlayer;
 
-	//std::vector<Cube*> CubeArray;
-	//Cube *Cube1;
+	std::vector<Cube*> CubeArray;
+	Cube *Cube1;
 
 	int NumOfCubes;
 

@@ -146,12 +146,11 @@ void Mesh::InitialiseShaders()
 
 void Mesh::Update(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
-	// update the model matrix based on the 
-	modelMatrix = glm::translate(glm::mat4(1.0f), position );
-	modelMatrix = glm::rotate(modelMatrix, rotation.x, glm::vec3(1, 0, 0));
-	modelMatrix = glm::rotate(modelMatrix, rotation.y, glm::vec3(0, 1, 0));
-	modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3(0, 0, 1));
-	modelMatrix = glm::scale(glm::mat4(1.0f), scale);
+	modelMatrix = glm::translate(glm::mat4(1.0f), position);
+	modelMatrix = glm::scale(modelMatrix, scale);
+	modelMatrix = glm::rotate(modelMatrix, rotation.x, glm::vec3(1,0,0));
+	modelMatrix = glm::rotate(modelMatrix, rotation.y, glm::vec3(0,1,0));
+	modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3(0,0,1));
 }
 
 void Mesh::Draw(glm::mat4& viewMatrix, glm::mat4& projMatrix)

@@ -82,8 +82,8 @@ void ObjLoader::ReadObjFileData(FILE* objFile)
 	}
 }
 
-/// Convert mesh data.
-/// Converts the mesh data to something OpenGL can read.
+// Convert mesh data.
+// Converts the mesh data to something OpenGL can read.
 void ObjLoader::BuildMeshDataVectors()
 {
 	for (int i = 0; i < vertices.size(); i++)
@@ -114,8 +114,8 @@ void ObjLoader::BuildMeshDataVectors()
 	}
 }
 
-/// Extract Face Data.
-/// Reads in a face passed in from a string, and handles any operations that are needed.
+// Extract Face Data.
+// Reads in a face passed in from a string, and handles any operations that are needed.
 Vertex ObjLoader::ExtractFaceVertexData(std::string& s)
 {
 	//we will see how many '/' the above string contains, and store their positions
@@ -171,13 +171,13 @@ Vertex ObjLoader::ExtractFaceVertexData(std::string& s)
 	return result;
 }
 
-//*
-// * Adapted from opengl-tutorial.com (tutorial #13)
-// *
-// * This works out the tangent and bi-tangent (sometimes called
-// * bi-normal) vectors for each triangle. These are needed in
-// * normal mapping.
-// */
+/*
+ * Adapted from opengl-tutorial.com (tutorial #13)
+ *
+ * This works out the tangent and bi-tangent (sometimes called
+ * bi-normal) vectors for each triangle. These are needed in
+ * normal mapping.
+ */
 void ObjLoader::ComputeTangentBasis() {
 
 	for (unsigned int i = 0; i < meshVertices.size(); i += 3){

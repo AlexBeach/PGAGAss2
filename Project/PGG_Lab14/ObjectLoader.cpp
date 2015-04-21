@@ -45,7 +45,7 @@
 //    std::vector<glm::vec2> tempUVs;
 //    std::vector<glm::vec3> tempNormals;
 //
-//    // while the file is open, loop through the contents
+//   //  while the file is open, loop through the contents
 //    while(!file.eof())
 //    {
 //            // read the file line by line
@@ -69,10 +69,10 @@
 //                            sscanf(line, "vt %f %f", &a, &b);
 //                            tempUVs.push_back(glm::vec2(a, b));
 //                    }
-//                    // else we just have the vertex position
+//                   //  else we just have the vertex position
 //                    else
 //                    {                              
-//                            sscanf(line, "v %f %f %f", &a, &b, &c);
+//                           // sscanf(line, "v %f %f %f", &a, &b, &c);
 //                            tempVertices.push_back(glm::vec3(a, b, c));
 //                    }
 //            }
@@ -129,7 +129,7 @@
 //    unsigned int arraySize = vertexIndices.size();
 //    for(unsigned int i = 0; i < arraySize; i++)
 //    {
-//            // Now we assign the verts to the actual vector in the order in which the faces tell us
+//           //  Now we assign the verts to the actual vector in the order in which the faces tell us
 //            unsigned int vertexIndex = vertexIndices[i];
 //            unsigned int uvIndex = uvIndices[i];
 //            unsigned int normalIndex = normalIndices[i];
@@ -142,7 +142,7 @@
 //                    // if the index is greater than 0, because OBJ starts at 1 (c++ starts at 0), we can safely remove 1 to translate the index
 //                    glm::vec3 vertex = tempVertices[vertexIndex - 1];
 //
-//                    // and then add the vertex to the vector
+//                   //  and then add the vertex to the vector
 //                    vertices.push_back(vertex);
 //            }
 //
@@ -161,8 +161,8 @@
 //            }
 //    }
 //
-//    // variable to tell OpenGL how many vertices to draw
-//    numVertices = vertices.size();
+//   //  variable to tell OpenGL how many vertices to draw
+//   // numVertices = vertices.size();
 //
 //	    std::cout << "Successfully loaded file: '" << filename << "'" << std::endl;
 //}
@@ -176,22 +176,22 @@
 //	glBindVertexArray( VAO );
 //	
 //	// Variable for storing a VBO
-//	GLuint positionBuffer = 0;
+//	//GLuint positionBuffer = 0;
 //	// Create a generic 'buffer'
-//	glGenBuffers(1, &positionBuffer);
+//	//glGenBuffers(1, &positionBuffer);
 //	// Tell OpenGL that we want to activate the buffer and that it's a VBO
-//	glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+//	//glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
 //	// With this buffer active, we can now send our data to OpenGL
 //	// We need to tell it how much data to send
 //	// We can also tell OpenGL how we intend to use this buffer - here we say GL_STATIC_DRAW because we're only writing it once
 //	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numVertices * 3, &vertices[0], GL_STATIC_DRAW);
 //
-//	// This tells OpenGL how we link the vertex data to the shader
-//	// (We will look at this properly in the lectures)
+//	 //This tells OpenGL how we link the vertex data to the shader
+//	 //(We will look at this properly in the lectures)
 //	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0 );
 //	glEnableVertexAttribArray(0);
 //
-//		// Variable for storing a VBO
+//	//	 Variable for storing a VBO
 //	GLuint normalBuffer = 0;
 //	// Create a generic 'buffer'
 //	glGenBuffers(1, &normalBuffer);
@@ -207,9 +207,9 @@
 //	glEnableVertexAttribArray(1);
 //
 //	// Unbind for neatness, it just makes life easier
-//	// As a general tip, especially as you're still learning, for each function that needs to do something specific try to return OpenGL in the state you found it in
-//	// This means you will need to set the states at the beginning of your function and set them back at the end
-//	// If you don't do this, your function could rely on states being set elsewhere and it's easy to lose track of this as your project grows
+//	//As a general tip, especially as you're still learning, for each function that needs to do something specific try to return OpenGL in the state you found it in
+//	//This means you will need to set the states at the beginning of your function and set them back at the end
+//	//If you don't do this, your function could rely on states being set elsewhere and it's easy to lose track of this as your project grows
 //	// If you then change the code from elsewhere, your current code could mysteriously stop working properly!
 //	glBindBuffer(GL_ARRAY_BUFFER, 0);
 //	glBindVertexArray( 0 );
@@ -229,17 +229,17 @@
 //
 //void ObjectLoader::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
 //{
-//	// Ok, here I like to indent drawing calls - it's just a personal style, you may not like it and that's fine ;)
-//	// Generally you will need to be activating and deactivating OpenGL states
-//	// I just find it visually easier if the activations / deactivations happen at different tab depths
-//	// This can help when things get more complex
-//	// Activate the shader program
+//	 //Ok, here I like to indent drawing calls - it's just a personal style, you may not like it and that's fine ;)
+//	 //Generally you will need to be activating and deactivating OpenGL states
+//	 //I just find it visually easier if the activations / deactivations happen at different tab depths
+//	 //This can help when things get more complex
+//	 //Activate the shader program
 //	glUseProgram(shader->Program());
 //
 //		// Activate the VAO
 //		glBindVertexArray(VAO);
 //
-//			// Send matrices to the shader as uniforms like this:
+//		//	 Send matrices to the shader as uniforms like this:
 //		glUniformMatrix4fv(shader->ModelMat(), 1, GL_FALSE, glm::value_ptr(modelMatrix));
 //		glUniformMatrix4fv(shader->ViewMat(), 1, GL_FALSE, glm::value_ptr(viewMatrix));
 //		glUniformMatrix4fv(shader->ProjMat(), 1, GL_FALSE, glm::value_ptr(projMatrix));

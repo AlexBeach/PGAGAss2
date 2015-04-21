@@ -1,9 +1,7 @@
 #include "application.h"
 
-// An initialisation function, mainly for GLEW
-// This will also print to console the version of OpenGL we are using
-bool InitGL()
-{
+bool InitGL()		// An initialisation function, mainly for GLEW
+{					// This will also print to console the version of OpenGL we are using
 	// GLEW has a problem with loading core OpenGL
 	// See here: https://www.opengl.org/wiki/OpenGL_Loading_Library
 	// The temporary workaround is to enable its 'experimental' features
@@ -33,7 +31,7 @@ application::application(void)
 	winWidth = 1280;
 	winHeight = 720;
 
-	NumOfCubes = 5;
+	NumOfCubes = 1000;
 
 	Quit = false;
 }
@@ -118,28 +116,30 @@ void application::InitEntities(void)
 {
 	srand(time(NULL));
 
-	Mesh* playerMesh = new Mesh("Models/Sphere.obj");
-	playerMesh->LoadTexture("Textures/FirstTexture.bmp");
+	camera = new Camera();
 
+	playerMesh = new Mesh("Models/Sphere.obj");
+	playerMesh->LoadTexture("Textures/FirstTexture.bmp");
 	myPlayer = new Sphere();
 	myPlayer->AttachMesh(playerMesh);
 
-	camera = new Camera();
+	CubeMesh = new Mesh("Models/Cube.obj");
+	CubeMesh->LoadTexture("Textures/FirstTexture.bmp");
 
-	//for(int i=0; i<NumOfCubes; i++)
-	//{
-	//	float x, y, z;
-	//
-	//	x = rand() % 80 - 40; //random number between 0 and *number* minus *number*
-	//	y = rand() % 40 - 30;
-	//	z = -300 - (i * (20 - (rand() % 40)) / 20);
-	//
-	//	Cube1 = new Cube();
-	//	Cube1->AttachMesh(CubeMesh);
-	//	Cube1->setPos(glm::vec3(x, y, z));
-	//
-	//	CubeArray.push_back(Cube1);
-	//}
+	for(int i=0; i<NumOfCubes; i++)
+	{
+		float x, y, z;
+	
+		x = rand() % 80 - 40; //random number between 0 and *number* minus *number*
+		y = rand() % 40 - 30;
+		z = -300 - (i * (20 - (rand() % 40)) / 20);
+	
+		Cube1 = new Cube();
+		Cube1->AttachMesh(CubeMesh);
+		Cube1->setPos(glm::vec3(x, y, z));
+	
+		CubeArray.push_back(Cube1);
+	}
 }
 
 void application::Update(float dt)
@@ -152,6 +152,17 @@ void application::Update(float dt)
 	}
 
 	myPlayer->Update(dt, &GameInput);
+
+	//for(int i=0; i<CubeArray.size(); i++)
+	//{
+	//	//CubeArray[i]->Update(dt);
+
+	//	//if(CubeArray[i]->isOffScreen()==true)
+	//	//{
+	//	//	CubeArray[i]->SetPosition(glm::vec3(CubeArray[i]->GetPosition().x, CubeArray[i]->GetPosition().y, CubeArray[i]->GetPosition().z-400));
+	//	//}
+	//}
+
 	camera->update(myPlayer->GetPosition(), 1.2f);
 }
 
@@ -162,7 +173,27 @@ void application::Draw(float dt)
 	// This writes the above colour to the colour part of the framebuffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//// Construct a projection matrix for the camera
+	//Projection = glm::perspective(45.0f, 16.0f / 9.0f, 0.1f, 600.0f);
+	//
+	//// Create a viewing matrix for the camera
+	//// Don't forget, this is the opposite of where the camera actually is
+	//// You can think of this as moving the world away from the camera
+	//View = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,-2.5f));
+
 	myPlayer->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
+
+	for(int i=0; i<CubeArray.size(); i++)
+	{
+		CubeArray[i]->Update(dt);
+
+		if(CubeArray[i]->isOffScreen()==true)
+		{
+			CubeArray[i]->SetPosition(glm::vec3(CubeArray[i]->GetPosition().x, CubeArray[i]->GetPosition().y, CubeArray[i]->GetPosition().z-400));
+		}
+
+		CubeArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
+	}
 
 	//for(int i=0; i < CubeArray.size(); i++)
 	//{

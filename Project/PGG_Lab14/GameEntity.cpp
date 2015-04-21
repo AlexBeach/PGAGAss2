@@ -7,6 +7,7 @@ void GameEntity::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
 	// Draw the object using the given view (which contains the camera orientation) and projection (which contains information about the camera 'lense')
 	Object->Draw(viewMatrix, projMatrix);
+	UpdateMatrix(position, rotation, scale);
 }
 
 void GameEntity::AttachMesh(Mesh* mesh)
