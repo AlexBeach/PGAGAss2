@@ -31,7 +31,7 @@ application::application(void)
 	winWidth = 1280;
 	winHeight = 720;
 
-	NumOfCubes = 1000;
+	NumOfCubes = 2000;
 
 	Quit = false;
 }
@@ -131,12 +131,12 @@ void application::InitEntities(void)
 		float x, y, z;
 	
 		x = rand() % 80 - 40; //random number between 0 and *number* minus *number*
-		y = rand() % 40 - 30;
+		y = (rand() % 40 - 30)+10;
 		z = -300 - (i * (20 - (rand() % 40)) / 20);
 	
-		Cube1 = new Cube();
+		Cube *Cube1 = new Cube();
 		Cube1->AttachMesh(CubeMesh);
-		Cube1->setPos(glm::vec3(x, y, z));
+		Cube1->SetPosition(glm::vec3(x, y, z));
 	
 		CubeArray.push_back(Cube1);
 	}
@@ -153,15 +153,15 @@ void application::Update(float dt)
 
 	myPlayer->Update(dt, &GameInput);
 
-	//for(int i=0; i<CubeArray.size(); i++)
-	//{
-	//	//CubeArray[i]->Update(dt);
+	for(int i=0; i<CubeArray.size(); i++)
+	{
+		CubeArray[i]->Update(dt);
 
-	//	//if(CubeArray[i]->isOffScreen()==true)
-	//	//{
-	//	//	CubeArray[i]->SetPosition(glm::vec3(CubeArray[i]->GetPosition().x, CubeArray[i]->GetPosition().y, CubeArray[i]->GetPosition().z-400));
-	//	//}
-	//}
+		if(CubeArray[i]->isOffScreen()==true)
+		{
+			CubeArray[i]->SetPosition(glm::vec3(CubeArray[i]->GetPosition().x, CubeArray[i]->GetPosition().y, CubeArray[i]->GetPosition().z-400));
+		}
+	}
 
 	camera->update(myPlayer->GetPosition(), 1.2f);
 }
@@ -169,7 +169,7 @@ void application::Update(float dt)
 void application::Draw(float dt)
 {
 	// Specify the colour to clear the framebuffer to
-	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	// This writes the above colour to the colour part of the framebuffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -185,13 +185,6 @@ void application::Draw(float dt)
 
 	for(int i=0; i<CubeArray.size(); i++)
 	{
-		CubeArray[i]->Update(dt);
-
-		if(CubeArray[i]->isOffScreen()==true)
-		{
-			CubeArray[i]->SetPosition(glm::vec3(CubeArray[i]->GetPosition().x, CubeArray[i]->GetPosition().y, CubeArray[i]->GetPosition().z-400));
-		}
-
 		CubeArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
 	}
 
@@ -235,7 +228,7 @@ void application::Run(void)
 		// This is a 'delta' (used in physics to denote a change in something)
 		// So we call it our 'deltaT' and I like to use an 's' to remind me that it's in seconds!
 		// (To get it in seconds we need to divide by 1000 to convert from milliseconds)
-		float deltaTs = (float) (current - lastTime) / 1000.0f;
+		float deltaTs = (float) (current - lastTime) / 100.0f;
 		// Now that we've done this we can use the current time as the next frame's previous time
 		lastTime = current;
 
@@ -245,7 +238,7 @@ void application::Run(void)
 		// Limiter in case we're running really quick
 		if( deltaTs < (1.0f/50.0f) )	// not sure how accurate the SDL_Delay function is..
 		{
-			SDL_Delay((unsigned int) (((1.0f/50.0f) - deltaTs)*1000.0f));
+			SDL_Delay((unsigned int) (((1.0f/50.0f) - deltaTs)*100.0f));
 		}
 	}
 	// If we get outside the main game loop, it means our user has requested we exit

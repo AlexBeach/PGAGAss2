@@ -48,7 +48,6 @@ private:
 	Sphere *myPlayer;
 
 	std::vector<Cube*> CubeArray;
-	Cube *Cube1;
 
 	int NumOfCubes;
 

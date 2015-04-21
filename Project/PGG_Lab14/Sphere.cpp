@@ -5,9 +5,9 @@
 
 Sphere::Sphere()
 {
-	position = glm::vec3(0, -5, -10);
+	position = glm::vec3(0, -2, -10);
 	rotation = glm::vec3(0, 0, 0);
-	scale = glm::vec3(0.2f, 0.2f, 0.2f);
+	scale = glm::vec3(0.4f, 0.4f, 0.4f);
 }
 
 Sphere::~Sphere(void)
@@ -17,14 +17,14 @@ Sphere::~Sphere(void)
 
 void Sphere::Update(float deltaTs, input* input)
 {
-	rotation.y += deltaTs * 0.5f;
-	while(rotation.y > (3.14159265358979323846 * 2.0))
+	rotation.x -= deltaTs * 0.5f;
+	while(rotation.x < (3.14159265358979323846 * 2.0))
 	{
-		rotation.y -= (3.14159265358979323846 * 2.0);
+		rotation.x += (3.14159265358979323846 * 2.0);
 	}
 
-	if(input->isLeftDown()==true) {  position.x--; }
-	if(input->isRightDown()==true) {  position.x++; }
-	if(input->isUpDown()==true) {  position.y++; }
-	if(input->isDownDown()==true) {  position.y--; }
+	if(input->isLeftDown()==true) {  position.x-=0.1; }
+	if(input->isRightDown()==true) {  position.x+=0.1; }
+	if(input->isUpDown()==true) {  position.y+=0.1; }
+	if(input->isDownDown()==true) {  position.y-=0.1; }
 }

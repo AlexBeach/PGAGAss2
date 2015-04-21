@@ -8,7 +8,7 @@ Cube::Cube()
 {
 	position = glm::vec3(0, 0, 0);
 	rotation = glm::vec3(0, 0, 0);
-	scale = glm::vec3(0.1f, 0.1f, 0.1f);
+	scale = glm::vec3(0.2f, 0.2f, 0.2f);
 	offScreen = false;
 }
 
@@ -19,13 +19,7 @@ Cube::~Cube(void)
 
 void Cube::Update(float deltaTs)
 {
-	//rotation.y += deltaTs * 0.5f;
-	//while(rotation.y > (3.14159265358979323846 * 2.0))
-	//{
-	//	rotation.y -= (3.14159265358979323846 * 2.0);
-	//}
-
-	position.z += 0.1f;
+	position.z += 2.0f;
 
 	if(position.z > 10)
 	{
