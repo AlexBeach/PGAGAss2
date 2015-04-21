@@ -10,7 +10,7 @@
 #include "glew.h"
 #include "Shader.h"
 #include "Input.h"
-#include "ObjectLoader.h"
+#include "Mesh.h"
 
 class GameEntity
 {
@@ -24,11 +24,11 @@ public:
 	void setPos(glm::vec3 Pos) { Pos = position; };
 	glm::vec3 GetPosition() { return position; };
 
-	void AttachMesh(ObjectLoader* mesh);
+	void AttachMesh(Mesh* mesh);
 
 protected:
 	
-	void UpdateMatrix();
+	void UpdateMatrix(glm::vec3 pos, glm::vec3 rot, glm::vec3 s);
 
 	/// Object position vector
 	glm::vec3 position;
@@ -46,5 +46,5 @@ protected:
 private:
 
 	// Create a model
-	ObjectLoader *Object;
+	Mesh *Object;
 };

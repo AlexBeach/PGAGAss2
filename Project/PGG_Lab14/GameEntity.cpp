@@ -9,12 +9,12 @@ void GameEntity::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
 	Object->Draw(viewMatrix, projMatrix);
 }
 
-void GameEntity::AttachMesh(ObjectLoader* mesh)
+void GameEntity::AttachMesh(Mesh* mesh)
 {
 	Object = mesh;
 }
 
-void GameEntity::UpdateMatrix()
+void GameEntity::UpdateMatrix(glm::vec3 pos, glm::vec3 rot, glm::vec3 s)
 {
-	Object->Update(position, rotation, scale);
+	Object->Update(pos, rot, s);
 }

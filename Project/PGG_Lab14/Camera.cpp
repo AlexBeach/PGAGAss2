@@ -23,13 +23,12 @@ Camera::~Camera(void)
 
 void Camera::update(glm::vec3 targetPosition, float movement)
 {
-	steve += movement / 77.7f;
-	float newfov = 70 + sin(steve) * 2.7f;
-
+	//steve += movement / 77.7f;
+	//float newfov = 70 + sin(steve) * 2.7f;
 
 	glm::vec3 newPos;
 	newPos.x = position.x + (targetPosition.x / movement);
 	newPos.y = position.y + (targetPosition.y / movement);
-	viewMatrix = glm::lookAt(newPos, newPos + glm::vec3(0, 0, -1),glm::vec3(0, 1, 0));
-	//projectionMatrix = glm::perspective(newfov, 16.0f / 9.0f, 0.1f, 200.0f);				//UNCOMMENT FOR AWESOMENESS
+	//viewMatrix = glm::lookAt(newPos, newPos + glm::vec3(0, 0, -1),glm::vec3(0, 1, 0));
+	//projectionMatrix = glm::perspective(newfov, 16.0f / 9.0f, 0.1f, 200.0f);
 }

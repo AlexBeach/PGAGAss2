@@ -87,7 +87,9 @@
     <ClCompile Include="glew.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ObjectLoader.cpp" />
+    <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
@@ -98,7 +100,9 @@
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="glew.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="ObjectLoader.h" />
+    <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="wglew.h" />
