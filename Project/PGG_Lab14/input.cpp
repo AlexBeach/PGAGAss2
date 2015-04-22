@@ -5,7 +5,7 @@
 
 input::input(void)
 {
-	Quit = Up = Down = Left = Right = Power = false;
+	Quit = Up = Down = Left = Right = Fire = false;
 }
 
 input::~input(void)
@@ -26,7 +26,6 @@ void input::GameInputs()
 		switch(incomingEvent.type)
 		{
 			case SDL_QUIT:
-				// The event type is SDL_QUIT
 				// This means we have been asked to quit - probably the user clicked on the 'x' at the top right corner of the window
 				// To quit we need to set our 'go' bool to false so that we can escape out of the game loop
 				Quit = true;
@@ -55,6 +54,8 @@ void input::GameInputs()
 					case SDLK_RIGHT:
 					case SDLK_d:	Right = true;
 						break;
+					case SDLK_SPACE:	Fire = true;
+						break;
 					case SDLK_ESCAPE:	Quit = true;
 						break;
 				}
@@ -77,6 +78,8 @@ void input::GameInputs()
 						break;
 					case SDLK_RIGHT:
 					case SDLK_d:	Right = false;
+						break;
+					case SDLK_SPACE:	Fire = false;
 						break;
 					case SDLK_ESCAPE:	Quit = false;
 						break;
@@ -111,7 +114,7 @@ bool input::isRightDown(void)
 	return Right;
 }
 
-bool input::isPowerDown(void)
+bool input::isFireDown(void)
 {
-	return Power;
+	return Fire;
 }

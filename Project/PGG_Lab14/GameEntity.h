@@ -5,13 +5,12 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <time.h>
 #include <gtc/type_ptr.hpp>
 #include <gtc/matrix_transform.hpp>
 #include "glew.h"
-#include "Shader.h"
-#include "Input.h"
 #include "Mesh.h"
-//#include "ObjectLoader.h"
+#include "Input.h"
 
 class GameEntity
 {
@@ -22,10 +21,17 @@ public:
 	/// Draws object using the given camera view and projection matrices
 	void Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix);
 
-	void setPos(glm::vec3 Pos) { Pos = position; };
-	glm::vec3 GetPosition() { return position; };
+	bool Collision(glm::vec3 MinPos, glm::vec3 MaxPos, glm::vec3 OtherPos);
 
 	void AttachMesh(Mesh* mesh);
+
+	inline void setPos(glm::vec3 Pos) { Pos = position; };
+	inline glm::vec3 GetPosition() { return position; };
+
+	inline glm::vec3 getMin(void) { return Object->getMin(); };
+	inline glm::vec3 getMax(void) { return Object->getMax(); };
+	inline glm::vec3 getDist(void) { return Object->getDistance(); };
+	inline Mesh* getMesh(void) { return Object; };
 
 protected:
 	
@@ -39,10 +45,13 @@ protected:
 
 	//scale
 	glm::vec3 scale;
+	float scaler;
 
 	/// Object's model matrix
 	/// This is rebuilt in the update function
 	glm::mat4 modelMatrix;
+
+	float Speed;
 
 private:
 

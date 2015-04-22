@@ -31,16 +31,20 @@ application::application(void)
 	winWidth = 1280;
 	winHeight = 720;
 
-	NumOfCubes = 2000;
+	NumOfAsteroids = 1;
 
-	Quit = false;
+	delay = 0;
+
+	Quit = Hit = false;
 }
 
 application::~application(void)
 {
 	// Cleanup phase
+	AsteroidArray.clear();
+
 	SDL_GL_DeleteContext(glcontext);
-	SDL_DestroyWindow( window );
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
@@ -118,15 +122,20 @@ void application::InitEntities(void)
 
 	camera = new Camera();
 
-	playerMesh = new Mesh("Models/Sphere.obj");
-	playerMesh->LoadTexture("Textures/FirstTexture.bmp");
-	myPlayer = new Sphere();
+	playerMesh = new Mesh("Models/StarWarsShip.obj");
+	playerMesh->LoadTexture("Textures/SpaceShipTexture.bmp");
+	myPlayer = new Player();
 	myPlayer->AttachMesh(playerMesh);
 
-	CubeMesh = new Mesh("Models/Cube.obj");
-	CubeMesh->LoadTexture("Textures/FirstTexture.bmp");
+	AsteroidMesh = new Mesh("Models/Rock.obj");
+	AsteroidMesh->LoadTexture("Textures/RockTexture.bmp");
+	////glBindTexture();
+	//glBegin(GL_QUADS);
+	//
+	//
+	//glEnd;
 
-	for(int i=0; i<NumOfCubes; i++)
+	for(int i=0; i<NumOfAsteroids; i++)
 	{
 		float x, y, z;
 	
@@ -134,12 +143,21 @@ void application::InitEntities(void)
 		y = (rand() % 40 - 30)+10;
 		z = -300 - (i * (20 - (rand() % 40)) / 20);
 	
-		Cube *Cube1 = new Cube();
-		Cube1->AttachMesh(CubeMesh);
-		Cube1->SetPosition(glm::vec3(x, y, z));
+		Asteroids = new Asteroid();
+		Asteroids->AttachMesh(AsteroidMesh);
+		Asteroids->SetPosition(glm::vec3(x, y, z));
 	
-		CubeArray.push_back(Cube1);
+		AsteroidArray.push_back(Asteroids);
 	}
+
+	BulletMesh = new Mesh("Models/Cube.obj");
+	BulletMesh->LoadTexture("Textures/GoldBullet.bmp");
+
+	SunMesh = new Mesh("Models/Sphere.obj");
+	SunMesh->LoadTexture("Textures/Sun.bmp");
+
+	Sun = new OtherObject();
+	Sun->AttachMesh(SunMesh);
 }
 
 void application::Update(float dt)
@@ -153,16 +171,76 @@ void application::Update(float dt)
 
 	myPlayer->Update(dt, &GameInput);
 
-	for(int i=0; i<CubeArray.size(); i++)
+	for(int i=0; i<AsteroidArray.size(); i++)
 	{
-		CubeArray[i]->Update(dt);
+		AsteroidArray[i]->Update(dt);
 
-		if(CubeArray[i]->isOffScreen()==true)
+		if(AsteroidArray[i]->isOffScreen()==true)
 		{
-			CubeArray[i]->SetPosition(glm::vec3(CubeArray[i]->GetPosition().x, CubeArray[i]->GetPosition().y, CubeArray[i]->GetPosition().z-400));
+			AsteroidArray[i]->SetPosition(glm::vec3(rand() % 80 - 40, (rand() % 40 - 30)+10, AsteroidArray[i]->GetPosition().z-400));
 		}
 	}
 
+	if(delay>=10)
+	{
+		if(GameInput.isFireDown()==true)
+		{
+			Bullets = new Bullet();
+			Bullets->AttachMesh(BulletMesh);
+			Bullets->SetPosition(glm::vec3(myPlayer->GetPosition().x, myPlayer->GetPosition().y, myPlayer->GetPosition().z));
+			BulletArray.push_back(Bullets);
+			delay=0;
+		}
+	}
+	else
+	{
+		delay++;
+	}
+
+	for(int i=0; i<BulletArray.size(); i++)
+	{
+		BulletArray[i]->Update(dt);
+
+		for (int j=0; j<AsteroidArray.size(); j++)
+		{
+			//if((BulletArray[i]->getMax().x > AsteroidArray[j]->getMin().x) && (BulletArray[i]->getMin().x < AsteroidArray[j]->getMax().x))
+			//{
+			//	if((BulletArray[i]->getMax().y > AsteroidArray[j]->getMin().y) && (BulletArray[i]->getMin().y < AsteroidArray[j]->getMax().y))
+			//	{
+			//		if((BulletArray[i]->getMax().z > AsteroidArray[j]->getMin().z) && (BulletArray[i]->getMin().z < AsteroidArray[j]->getMax().z))
+			//		{
+			//			Hit = true;
+			//		}
+			//	}
+			//}
+
+			if(BulletArray[i]->Collision(AsteroidArray[j]->getMin(), AsteroidArray[j]->getMax(), AsteroidArray[j]->GetPosition())==true)
+			{
+				std::cout << "True" << std::endl;
+				//Hit = false;
+				AsteroidArray[j]->SetPosition(glm::vec3(rand() % 80 - 40, (rand() % 40 - 30)+10, AsteroidArray[j]->GetPosition().z-400));
+				BulletArray.erase(BulletArray.begin()+i);
+				i--;
+			}
+
+			//if(Hit==true)
+			//{
+			//	//BulletArray[i]->Collision(AsteroidArray[j]->GetMesh());
+			//	std::cout << "True" << std::endl;
+			//	Hit = false;
+			//	AsteroidArray[j]->SetPosition(glm::vec3(rand() % 80 - 40, (rand() % 40 - 30)+10, AsteroidArray[j]->GetPosition().z-400));
+			//	BulletArray.erase(BulletArray.begin()+i);
+			//	i--;
+			//}
+		}
+	
+		if(BulletArray[i]->isOffScreen()==true)
+		{
+			BulletArray.erase(BulletArray.begin()+i);
+			i--;
+		}
+	}
+	
 	camera->update(myPlayer->GetPosition(), 1.2f);
 }
 
@@ -173,32 +251,19 @@ void application::Draw(float dt)
 	// This writes the above colour to the colour part of the framebuffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//// Construct a projection matrix for the camera
-	//Projection = glm::perspective(45.0f, 16.0f / 9.0f, 0.1f, 600.0f);
-	//
-	//// Create a viewing matrix for the camera
-	//// Don't forget, this is the opposite of where the camera actually is
-	//// You can think of this as moving the world away from the camera
-	//View = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,-2.5f));
+	Sun->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
 
 	myPlayer->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
 
-	for(int i=0; i<CubeArray.size(); i++)
+	for(int i=0; i<AsteroidArray.size(); i++)
 	{
-		CubeArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
+		AsteroidArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
 	}
 
-	//for(int i=0; i < CubeArray.size(); i++)
-	//{
-	//	CubeArray[i]->Update(dt);
-	//
-	//	if(CubeArray[i]->isOffScreen()==true)
-	//	{
-	//		CubeArray[i]->SetPosition(glm::vec3(CubeArray[i]->GetPosition().x, CubeArray[i]->GetPosition().y, CubeArray[i]->GetPosition().z-400));
-	//	}
-	//
-	//	CubeArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
-	//}
+	for(int i=0; i<BulletArray.size(); i++)
+	{
+		BulletArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
+	}
 
 	// This tells the renderer to actually show its contents to the screen
 	// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P
@@ -234,12 +299,6 @@ void application::Run(void)
 
 		Update(deltaTs);
 		Draw(deltaTs);
-
-		// Limiter in case we're running really quick
-		if( deltaTs < (1.0f/50.0f) )	// not sure how accurate the SDL_Delay function is..
-		{
-			SDL_Delay((unsigned int) (((1.0f/50.0f) - deltaTs)*100.0f));
-		}
 	}
 	// If we get outside the main game loop, it means our user has requested we exit
 }

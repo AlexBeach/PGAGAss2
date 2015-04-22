@@ -40,6 +40,8 @@ Mesh::Mesh(std::string objFileName)
 	
 	// Create the shaders
 	InitialiseShaders();
+
+	BoundingBoxCoords();
 }
 
 Mesh::~Mesh()
@@ -246,4 +248,48 @@ std::string Mesh::ReadFile(std::string fileName) {
 	}
 
 	return result;
+}
+
+void Mesh::BoundingBoxCoords(void)
+{
+	for(int i=0; i<numVertices; i++)
+	{
+		if(objLoader.GetMeshVertices()[i].x < Min.x)
+		{
+			Min.x = objLoader.GetMeshVertices()[i].x;
+		}
+		else if(objLoader.GetMeshVertices()[i].x > Max.x)
+		{
+			Max.x = objLoader.GetMeshVertices()[i].x;
+		}
+
+		if(objLoader.GetMeshVertices()[i].y < Min.y)
+		{
+			Min.y = objLoader.GetMeshVertices()[i].y;
+		}
+		else if(objLoader.GetMeshVertices()[i].y > Max.y)
+		{
+			Max.y = objLoader.GetMeshVertices()[i].y;
+		}
+
+		if(objLoader.GetMeshVertices()[i].z < Min.z)
+		{
+			Min.z = objLoader.GetMeshVertices()[i].z;
+		}
+		else if(objLoader.GetMeshVertices()[i].z > Max.z)
+		{
+			Max.z = objLoader.GetMeshVertices()[i].z;
+		}
+	}
+}
+
+glm::vec3 Mesh::getDistance(void)
+{
+	glm::vec3 d;
+
+	d.x = Max.x - Min.x;
+	d.y = Max.y - Min.y;
+	d.z = Max.z - Min.z;
+
+	return d;
 }

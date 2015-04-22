@@ -7,13 +7,14 @@
 #include <glm.hpp> // This is the main GLM header
 #include <gtc/type_ptr.hpp>
 #include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations/#include "Mesh.h"
-//#include "ObjectLoader.h"
 #include "Mesh.h"
 #include "input.h"
-#include "GameEntity.h"
-#include "Sphere.h"
-#include "Cube.h"
 #include "Camera.h"
+#include "GameEntity.h"
+#include "Player.h"
+#include "Asteroid.h"
+#include "Bullet.h"
+#include "OtherObject.h"
 
 class application
 {
@@ -41,15 +42,27 @@ private:
 	input GameInput;
 
 	Mesh* playerMesh;
-	Mesh* CubeMesh;
+	Mesh* AsteroidMesh;
+	Mesh* SunMesh;
 	Camera* camera;
 
 	//call the game entity class to create pool ball
-	Sphere *myPlayer;
+	Player *myPlayer;
 
-	std::vector<Cube*> CubeArray;
+	std::vector<Asteroid*> AsteroidArray;
+	int NumOfAsteroids;
+	Asteroid *Asteroids;
 
-	int NumOfCubes;
+	Mesh* BulletMesh;
 
-	bool Quit;
+	std::vector<Bullet*> BulletArray;
+	Bullet *Bullets;
+
+	OtherObject* Sun;
+
+	int delay;
+
+	glm::vec3 Distance;
+
+	bool Quit, Hit;
 };

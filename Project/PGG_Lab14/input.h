@@ -19,7 +19,7 @@ public:
 	bool isDownDown(void);
 	bool isLeftDown(void);
 	bool isRightDown(void);
-	bool isPowerDown(void);
+	bool isFireDown(void);
 
 private:
 
@@ -30,5 +30,5 @@ private:
 	// the SDL_Event is the datatype for the event
 	SDL_Event incomingEvent;
 
-	bool Quit, Up, Down, Left, Right, Power;
+	bool Quit, Up, Down, Left, Right, Fire;
 };

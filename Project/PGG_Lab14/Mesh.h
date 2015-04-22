@@ -36,6 +36,12 @@ public:
 
 	// Draws object using the given camera view and projection matrices
 	void Draw(glm::mat4& viewMatrix, glm::mat4& projMatrix);
+
+	void BoundingBoxCoords(void);
+
+	inline glm::vec3 getMin(void) { return Min; };
+	inline glm::vec3 getMax(void) { return Max; };
+	glm::vec3 getDistance(void);
 	
 protected:
 	// process an obj file
@@ -68,6 +74,8 @@ private:
 	GLuint biTangentBuffer;
 
 	std::string ReadFile(std::string fileName);
+
+	glm::vec3 Min, Max;
 
 	unsigned int numVertices;
 };
