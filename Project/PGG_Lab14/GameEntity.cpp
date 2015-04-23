@@ -3,12 +3,12 @@
 #include <gtc/type_ptr.hpp>
 #include <gtc/matrix_transform.hpp>
 
-void GameEntity::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix)
+void GameEntity::Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix, glm::vec3 light)
 {
 	UpdateMatrix(position, rotation, scale);
 
 	// Draw the object using the given view (which contains the camera orientation) and projection (which contains information about the camera 'lense')
-	Object->Draw(viewMatrix, projMatrix);
+	Object->Draw(viewMatrix, projMatrix, light);
 }
 
 void GameEntity::AttachMesh(Mesh* mesh)

@@ -31,7 +31,6 @@ Mesh::Mesh(std::string objFileName)
 	// Initialise variables
 	VAO = 0;
 	shader = 0;
-	shaderModelMatLocation = shaderViewMatLocation = shaderProjMatLocation = 0;
 
 	objLoader.Load(objFileName);
 
@@ -85,10 +84,10 @@ void Mesh::InitialiseVAO()
 void Mesh::InitialiseShaders()
 {	
 	// This is the vertex shader being loaded from file
-	std::string VertexShaderCode = ReadFile("Shaders/basicVert.vert");
+	std::string VertexShaderCode = ReadFile("Shaders/basicLight.vert");
 	
 	// This is the fragment shader
-	std::string FragShaderCode = ReadFile("Shaders/basicFrag.frag");
+	std::string FragShaderCode = ReadFile("Shaders/basicLight.frag");
 
 	// The 'program' stores the shaders
 	shader = glCreateProgram();
@@ -136,13 +135,11 @@ void Mesh::InitialiseShaders()
 
 		return;
 	}
-
-	// We need to get the location of the uniforms in the shaders
-	// This is so that we can send the values to them from the application
-	// We do this in the following way: 
-	shaderModelMatLocation = glGetUniformLocation( shader, "modelMat" );
-	shaderViewMatLocation  = glGetUniformLocation( shader, "viewMat" );
-	shaderProjMatLocation  = glGetUniformLocation( shader, "projMat" );
+	
+	// We need to setup our ID so they can work with our shaders
+	MatrixID = glGetUniformLocation(shader, "MVP");
+	ViewMatrixID = glGetUniformLocation(shader, "V");
+	ModelMatrixID = glGetUniformLocation(shader, "M");
 
 }
 
@@ -155,7 +152,7 @@ void Mesh::Update(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 	modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3(0,0,1));
 }
 
-void Mesh::Draw(glm::mat4& viewMatrix, glm::mat4& projMatrix)
+void Mesh::Draw(glm::mat4& viewMatrix, glm::mat4& projMatrix, glm::vec3 light)
 {
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
@@ -166,10 +163,17 @@ void Mesh::Draw(glm::mat4& viewMatrix, glm::mat4& projMatrix)
 		// Activate the VAO
 		glBindVertexArray( VAO );
 
-			// Send matrices to the shader as uniforms like this:
-			glUniformMatrix4fv(shaderModelMatLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix) );
-			glUniformMatrix4fv(shaderViewMatLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix) );
-			glUniformMatrix4fv(shaderProjMatLocation, 1, GL_FALSE, glm::value_ptr(projMatrix) );
+			
+			glm::mat4 MVP = projMatrix * viewMatrix * modelMatrix;
+
+			// Send our transformation to the currently bound shader, 
+			// in the "MVP" uniform
+			glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+			glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
+			glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
+			
+			GLuint LightID = glGetUniformLocation(shader, "LightPosition_worldspace");
+			glUniform3f(LightID, light.x, light.y, light.z);
 
 			//send the diffuse texture to the shader
 			int diffuseSampler = glGetUniformLocation(shader, "texSampler");

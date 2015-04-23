@@ -23,12 +23,6 @@ void Player::Update(float deltaTs, input* input)
 		if(input->isLeftDown()==true)
 		{
 			position.x-=0.1;
-
-			rotation.z += deltaTs * 0.025f;
-			while(rotation.z > (3.14159265358979323846 * 2.0))
-			{
-				rotation.z -= (3.14159265358979323846 * 2.0);
-			}
 		}
 	}
 
@@ -37,12 +31,6 @@ void Player::Update(float deltaTs, input* input)
 		if(input->isRightDown()==true)
 		{
 			position.x+=0.1;
-			
-			rotation.z -= deltaTs * 0.025f;
-			while(rotation.z < (3.14159265358979323846 * 2.0))
-			{
-				rotation.z += (3.14159265358979323846 * 2.0);
-			}
 		}
 	}
 

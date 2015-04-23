@@ -32,8 +32,8 @@ private:
 	void Draw(float dt);
 
 	int winPosX, winPosY, winWidth, winHeight;
-	SDL_Window *window;
-	SDL_Renderer *renderer;
+	SDL_Window *window, *window2;
+	SDL_Renderer *renderer, *renderer2;
 	SDL_GLContext glcontext;
 	glm::mat4 Projection;
 	glm::mat4 View;
@@ -58,11 +58,13 @@ private:
 	std::vector<Bullet*> BulletArray;
 	Bullet *Bullets;
 
+	glm::vec3 lightpos;
+
 	OtherObject* Sun;
 
-	int delay;
+	int delay, Lives;
 
 	glm::vec3 Distance;
 
-	bool Quit, Hit;
+	bool Quit, Hit, Dead;
 };

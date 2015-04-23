@@ -35,7 +35,9 @@ application::application(void)
 
 	delay = 0;
 
-	Quit = Hit = false;
+	Lives = 3;
+
+	Quit = Hit = Dead = false;
 }
 
 application::~application(void)
@@ -87,6 +89,8 @@ int application::Init()
 		winPosX, winPosY,
 		winWidth, winHeight,
 		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+
+	window2 = SDL_CreateWindow("InfoScreen", winPosX+winWidth, winPosY+winHeight, winWidth/2, winHeight/4, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 	// The last parameter lets us specify a number of options
 	// Here, we tell SDL that we want the window to be shown and that it can be resized
 	// You can learn more about SDL_CreateWindow here: https://wiki.libsdl.org/SDL_CreateWindow?highlight=%28\bCategoryVideo\b%29|%28CategoryEnum%29|%28CategoryStruct%29
@@ -103,6 +107,7 @@ int application::Init()
 	// That renderer can only be used for this window
 	// (yes, we can have multiple windows - feel free to have a play sometime)
 	renderer = SDL_CreateRenderer(window, -1, 0);
+	renderer2 = SDL_CreateRenderer(window2, 0, 0);
 
 	// Now that the SDL renderer is created for the window, we can create an OpenGL context for it!
 	// This will allow us to actually use OpenGL to draw to the window
@@ -122,7 +127,7 @@ void application::InitEntities(void)
 
 	camera = new Camera();
 
-	playerMesh = new Mesh("Models/SpaceShip.obj");
+	playerMesh = new Mesh("Models/Sphere.obj");
 	playerMesh->LoadTexture("Textures/SpaceShipTexture.bmp");
 	myPlayer = new Player();
 	myPlayer->AttachMesh(playerMesh);
@@ -140,8 +145,8 @@ void application::InitEntities(void)
 		float x, y, z;
 	
 		x = rand() % 80 - 40; //random number between 0 and *number* minus *number*
-		y = (rand() % 40 - 30)+10;
-		z = -300 - (i * (20 - (rand() % 40)) / 20);
+		y = (rand() % 40 - 40)+20;
+		z = -600 - (i * (20 - (rand() % 40)) / 20);
 	
 		Asteroids = new Asteroid();
 		Asteroids->AttachMesh(AsteroidMesh);
@@ -158,6 +163,8 @@ void application::InitEntities(void)
 
 	Sun = new OtherObject();
 	Sun->AttachMesh(SunMesh);
+
+	lightpos = glm::vec3(0, -30, -410);
 }
 
 void application::Update(float dt)
@@ -169,77 +176,73 @@ void application::Update(float dt)
 		Quit = true;
 	}
 
-	myPlayer->Update(dt, &GameInput);
-
-	for(int i=0; i<AsteroidArray.size(); i++)
+	if(Dead==false)
 	{
-		AsteroidArray[i]->Update(dt);
-
-		if(AsteroidArray[i]->isOffScreen()==true)
+		myPlayer->Update(dt, &GameInput);
+		
+		for(int i=0; i<AsteroidArray.size(); i++)
 		{
-			AsteroidArray[i]->SetPosition(glm::vec3(rand() % 80 - 40, (rand() % 40 - 30)+10, AsteroidArray[i]->GetPosition().z-400));
-		}
-	}
-
-	if(delay>=10)
-	{
-		if(GameInput.isFireDown()==true)
-		{
-			Bullets = new Bullet();
-			Bullets->AttachMesh(BulletMesh);
-			Bullets->SetPosition(glm::vec3(myPlayer->GetPosition().x, myPlayer->GetPosition().y, myPlayer->GetPosition().z));
-			BulletArray.push_back(Bullets);
-			delay=0;
-		}
-	}
-	else
-	{
-		delay++;
-	}
-
-	for(int i=0; i<BulletArray.size(); i++)
-	{
-		BulletArray[i]->Update(dt);
-
-		for (int j=0; j<AsteroidArray.size(); j++)
-		{
-			//if((BulletArray[i]->getMax().x > AsteroidArray[j]->getMin().x) && (BulletArray[i]->getMin().x < AsteroidArray[j]->getMax().x))
-			//{
-			//	if((BulletArray[i]->getMax().y > AsteroidArray[j]->getMin().y) && (BulletArray[i]->getMin().y < AsteroidArray[j]->getMax().y))
-			//	{
-			//		if((BulletArray[i]->getMax().z > AsteroidArray[j]->getMin().z) && (BulletArray[i]->getMin().z < AsteroidArray[j]->getMax().z))
-			//		{
-			//			Hit = true;
-			//		}
-			//	}
-			//}
-
-			if(BulletArray[i]->Collision(BulletArray[i]->getMin(), BulletArray[i]->getMax(), BulletArray[i]->GetPosition(), AsteroidArray[j]->getMin(), AsteroidArray[j]->getMax(), AsteroidArray[j]->GetPosition())==true)
+			AsteroidArray[i]->Update(dt);
+		
+			if(AsteroidArray[i]->isOffScreen()==true)
 			{
-				std::cout << "True" << std::endl;
-				Hit = true;
-				AsteroidArray[j]->SetPosition(glm::vec3(rand() % 80 - 40, (rand() % 40 - 30)+10, AsteroidArray[j]->GetPosition().z-400));
-				AsteroidArray.erase(AsteroidArray.begin()+j);
-				j--;
+				AsteroidArray[i]->SetPosition(glm::vec3(rand() % 80 - 40, (rand() % 40 - 30)+10, AsteroidArray[i]->GetPosition().z-600));
 			}
-
-			//if(Hit==true)
-			//{
-			//	//BulletArray[i]->Collision(AsteroidArray[j]->GetMesh());
-			//	std::cout << "True" << std::endl;
-			//	Hit = false;
-			//	AsteroidArray[j]->SetPosition(glm::vec3(rand() % 80 - 40, (rand() % 40 - 30)+10, AsteroidArray[j]->GetPosition().z-400));
-			//	BulletArray.erase(BulletArray.begin()+i);
-			//	i--;
-			//}
+		
+			if(AsteroidArray[i]->Collision(myPlayer->getMin(), myPlayer->getMax(), myPlayer->GetPosition(), AsteroidArray[i]->getMin(), AsteroidArray[i]->getMax(), AsteroidArray[i]->GetPosition())==true)
+			{
+				std::cout << "Asteroid Hit True" << std::endl;
+				Lives--;
+				AsteroidArray.erase(AsteroidArray.begin()+i);
+				i--;
+			}
 		}
-	
-		if((BulletArray[i]->isOffScreen()==true) || (Hit==true))
+		
+		if(delay>=10)
 		{
-			BulletArray.erase(BulletArray.begin()+i);
-			i--;
-			Hit = false;
+			if(GameInput.isFireDown()==true)
+			{
+				Bullets = new Bullet();
+				Bullets->AttachMesh(BulletMesh);
+				Bullets->SetPosition(glm::vec3(myPlayer->GetPosition().x, myPlayer->GetPosition().y, myPlayer->GetPosition().z));
+				BulletArray.push_back(Bullets);
+				delay=0;
+			}
 		}
+		else
+		{
+			delay++;
+		}
+		
+		for(int i=0; i<BulletArray.size(); i++)
+		{
+			BulletArray[i]->Update(dt);
+		
+			for (int j=0; j<AsteroidArray.size(); j++)
+			{		
+				if(BulletArray[i]->Collision(BulletArray[i]->getMin(), BulletArray[i]->getMax(), BulletArray[i]->GetPosition(), AsteroidArray[j]->getMin(), AsteroidArray[j]->getMax(), AsteroidArray[j]->GetPosition())==true)
+				{
+					std::cout << "Bullet Hit True" << std::endl;
+					Hit = true;
+					AsteroidArray[j]->SetPosition(glm::vec3(rand() % 80 - 40, (rand() % 40 - 30)+10, AsteroidArray[j]->GetPosition().z-600));
+					AsteroidArray.erase(AsteroidArray.begin()+j);
+					j--;
+				}
+			}
+		
+			if((BulletArray[i]->isOffScreen()==true) || (Hit==true))
+			{
+				BulletArray.erase(BulletArray.begin()+i);
+				i--;
+				Hit = false;
+			}
+		}
+	}
+
+	if(Lives<=0)
+	{
+		Dead = true;
+		//Quit = true;
 	}
 	
 	camera->update(myPlayer->GetPosition(), 1.2f);
@@ -252,18 +255,25 @@ void application::Draw(float dt)
 	// This writes the above colour to the colour part of the framebuffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	Sun->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
-
-	myPlayer->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
-
-	for(int i=0; i<AsteroidArray.size(); i++)
+	if(Dead==false)
 	{
-		AsteroidArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
+		Sun->Draw(camera->getViewMatrix(), camera->getprojectionMatrix(), lightpos);
+		
+		myPlayer->Draw(camera->getViewMatrix(), camera->getprojectionMatrix(), lightpos);
+		
+		for(int i=0; i<AsteroidArray.size(); i++)
+		{
+			AsteroidArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix(), lightpos);
+		}
+		
+		for(int i=0; i<BulletArray.size(); i++)
+		{
+			BulletArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix(), lightpos);
+		}
 	}
-
-	for(int i=0; i<BulletArray.size(); i++)
+	else if (Dead==true)
 	{
-		BulletArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix());
+
 	}
 
 	// This tells the renderer to actually show its contents to the screen

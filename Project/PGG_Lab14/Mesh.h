@@ -35,7 +35,7 @@ public:
 	void Update(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 
 	// Draws object using the given camera view and projection matrices
-	void Draw(glm::mat4& viewMatrix, glm::mat4& projMatrix);
+	void Draw(glm::mat4& viewMatrix, glm::mat4& projMatrix, glm::vec3 light);
 
 	void BoundingBoxCoords(void);
 
@@ -53,9 +53,11 @@ protected:
 
 	// Shader program
 	GLuint shader;
-
-	// Uniform locations
-	GLint shaderModelMatLocation, shaderViewMatLocation, shaderProjMatLocation;
+	
+	// Get a handle for our "MVP" uniform
+	GLuint MatrixID;
+	GLuint ViewMatrixID;
+	GLuint ModelMatrixID;
 
 	// Object's model matrix
 	// This is rebuilt in the update function

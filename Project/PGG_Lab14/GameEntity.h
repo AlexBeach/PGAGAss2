@@ -19,7 +19,7 @@ public:
 	inline ~GameEntity(void) {}
 
 	/// Draws object using the given camera view and projection matrices
-	void Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix);
+	void Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix, glm::vec3 light);
 
 	bool Collision(glm::vec3 MinPos, glm::vec3 MaxPos, glm::vec3 Pos, glm::vec3 OtherMinPos, glm::vec3 OtherMaxPos, glm::vec3 OtherPos);
 
