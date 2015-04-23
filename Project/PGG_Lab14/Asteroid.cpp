@@ -8,7 +8,7 @@ Asteroid::Asteroid()
 {
 	position = glm::vec3(0, 0, 0);
 	rotation = glm::vec3(0, 0, 0);
-	scaler = (1.0f + rand() % 15)/10;
+	scaler = 1;
 	scale = glm::vec3(scaler, scaler, scaler);
 	offScreen = false;
 	Speed = (1.0f + rand() % 10)/5;

@@ -42,6 +42,7 @@ public:
 	inline glm::vec3 getMin(void) { return Min; };
 	inline glm::vec3 getMax(void) { return Max; };
 	glm::vec3 getDistance(void);
+	glm::mat4 getModelMatrix(void) { return modelMatrix; };
 	
 protected:
 	// process an obj file

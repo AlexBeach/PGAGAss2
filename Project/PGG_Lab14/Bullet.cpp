@@ -8,7 +8,8 @@ Bullet::Bullet(void)
 {
 	position = glm::vec3(0, 0, 0);
 	rotation = glm::vec3(0, 0, 0);
-	scale = glm::vec3(0.1f, 0.1f, 0.15f);
+	scaler = 1;
+	scale = glm::vec3(scaler, scaler, scaler);
 	offScreen = false;
 }
 

@@ -21,17 +21,16 @@ public:
 	/// Draws object using the given camera view and projection matrices
 	void Draw(glm::mat4 viewMatrix, glm::mat4 projMatrix);
 
-	bool Collision(glm::vec3 MinPos, glm::vec3 MaxPos, glm::vec3 OtherPos);
+	bool Collision(glm::vec3 MinPos, glm::vec3 MaxPos, glm::vec3 Pos, glm::vec3 OtherMinPos, glm::vec3 OtherMaxPos, glm::vec3 OtherPos);
 
 	void AttachMesh(Mesh* mesh);
 
 	inline void setPos(glm::vec3 Pos) { Pos = position; };
 	inline glm::vec3 GetPosition() { return position; };
 
-	inline glm::vec3 getMin(void) { return Object->getMin(); };
-	inline glm::vec3 getMax(void) { return Object->getMax(); };
+	glm::vec3 getMin(void) { return Object->getMin(); };
+	glm::vec3 getMax(void) { return Object->getMax(); };
 	inline glm::vec3 getDist(void) { return Object->getDistance(); };
-	inline Mesh* getMesh(void) { return Object; };
 
 protected:
 	
@@ -43,13 +42,15 @@ protected:
 	/// Euler angles for rotation
 	glm::vec3 rotation;
 
+	glm::vec3 SMin, SMax;
+
 	//scale
 	glm::vec3 scale;
 	float scaler;
 
-	/// Object's model matrix
-	/// This is rebuilt in the update function
-	glm::mat4 modelMatrix;
+	///// Object's model matrix
+	///// This is rebuilt in the update function
+	//glm::mat4 modelMatrix;
 
 	float Speed;
 

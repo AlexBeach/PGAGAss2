@@ -31,7 +31,7 @@ application::application(void)
 	winWidth = 1280;
 	winHeight = 720;
 
-	NumOfAsteroids = 1;
+	NumOfAsteroids = 200;
 
 	delay = 0;
 
@@ -122,7 +122,7 @@ void application::InitEntities(void)
 
 	camera = new Camera();
 
-	playerMesh = new Mesh("Models/StarWarsShip.obj");
+	playerMesh = new Mesh("Models/SpaceShip.obj");
 	playerMesh->LoadTexture("Textures/SpaceShipTexture.bmp");
 	myPlayer = new Player();
 	myPlayer->AttachMesh(playerMesh);
@@ -214,13 +214,13 @@ void application::Update(float dt)
 			//	}
 			//}
 
-			if(BulletArray[i]->Collision(AsteroidArray[j]->getMin(), AsteroidArray[j]->getMax(), AsteroidArray[j]->GetPosition())==true)
+			if(BulletArray[i]->Collision(BulletArray[i]->getMin(), BulletArray[i]->getMax(), BulletArray[i]->GetPosition(), AsteroidArray[j]->getMin(), AsteroidArray[j]->getMax(), AsteroidArray[j]->GetPosition())==true)
 			{
 				std::cout << "True" << std::endl;
-				//Hit = false;
+				Hit = true;
 				AsteroidArray[j]->SetPosition(glm::vec3(rand() % 80 - 40, (rand() % 40 - 30)+10, AsteroidArray[j]->GetPosition().z-400));
-				BulletArray.erase(BulletArray.begin()+i);
-				i--;
+				AsteroidArray.erase(AsteroidArray.begin()+j);
+				j--;
 			}
 
 			//if(Hit==true)
@@ -234,10 +234,11 @@ void application::Update(float dt)
 			//}
 		}
 	
-		if(BulletArray[i]->isOffScreen()==true)
+		if((BulletArray[i]->isOffScreen()==true) || (Hit==true))
 		{
 			BulletArray.erase(BulletArray.begin()+i);
 			i--;
+			Hit = false;
 		}
 	}
 	

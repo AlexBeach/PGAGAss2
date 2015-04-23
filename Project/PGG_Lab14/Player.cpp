@@ -7,7 +7,8 @@ Player::Player()
 {
 	position = glm::vec3(0, -2, -5);
 	rotation = glm::vec3(0, 0, 0);
-	scale = glm::vec3(0.003f, 0.003f, 0.005f);
+	scaler = 1;
+	scale = glm::vec3(scaler, scaler, scaler);
 }
 
 Player::~Player(void)
