@@ -1,0 +1,9 @@
+Go to Release folder in the project folder and click the game application to load the game. 
+Two screens will load, the big screen is the game screen, and the little screen is the info screen.
+The info screen will tell you your score and remaining lives while you are playing and when you die it will tell you game, your final score, and what to do next.
+
+The controls are space to fire a bullet, and the arrow (or WASD) keys to move around vertically and horizontally.
+This game was made in visual studio 2012.
+
+The aim of the game is get as high a score as possible, by shooting and destroying asteroids to gain 10 points per asteroid, 
+before your run out of your starting 3 lives, by getting hit by an asteroid which will make you lose one life for each hit.
