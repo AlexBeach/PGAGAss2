@@ -4,9 +4,10 @@
 #include "glew.h"
 #include <iostream>
 #include <time.h>
+#include <string>
 #include <glm.hpp> // This is the main GLM header
 #include <gtc/type_ptr.hpp>
-#include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations/#include "Mesh.h"
+#include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations
 #include "Mesh.h"
 #include "input.h"
 #include "Camera.h"
@@ -15,6 +16,7 @@
 #include "Asteroid.h"
 #include "Bullet.h"
 #include "OtherObject.h"
+#include "Text.h"
 
 class application
 {
@@ -30,6 +32,8 @@ private:
 	void InitEntities(void);
 	void Update(float dt);
 	void Draw(float dt);
+	
+	void Restart(void);
 
 	int winPosX, winPosY, winWidth, winHeight;
 	SDL_Window *window, *window2;
@@ -62,7 +66,9 @@ private:
 
 	OtherObject* Sun;
 
-	int delay, Lives;
+	Text* text;
+
+	int delay, Lives, Score;
 
 	glm::vec3 Distance;
 

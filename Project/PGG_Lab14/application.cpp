@@ -33,7 +33,7 @@ application::application(void)
 
 	NumOfAsteroids = 200;
 
-	delay = 0;
+	delay = Score = 0;
 
 	Lives = 3;
 
@@ -44,9 +44,19 @@ application::~application(void)
 {
 	// Cleanup phase
 	AsteroidArray.clear();
+	BulletArray.clear();
+	delete camera;
+	delete playerMesh;
+	delete myPlayer;
+	delete AsteroidMesh;
+	delete BulletMesh;
+	delete Sun;
+	delete SunMesh;
+	delete text;
 
 	SDL_GL_DeleteContext(glcontext);
 	SDL_DestroyWindow(window);
+	SDL_DestroyWindow(window2);
 	SDL_Quit();
 }
 
@@ -90,7 +100,10 @@ int application::Init()
 		winWidth, winHeight,
 		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
-	window2 = SDL_CreateWindow("InfoScreen", winPosX+winWidth, winPosY+winHeight, winWidth/2, winHeight/4, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+	window2 = SDL_CreateWindow("InfoScreen", 
+		winPosX+winWidth/2, winPosY+winHeight, 
+		winWidth/2, winHeight/4, 
+		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 	// The last parameter lets us specify a number of options
 	// Here, we tell SDL that we want the window to be shown and that it can be resized
 	// You can learn more about SDL_CreateWindow here: https://wiki.libsdl.org/SDL_CreateWindow?highlight=%28\bCategoryVideo\b%29|%28CategoryEnum%29|%28CategoryStruct%29
@@ -134,11 +147,6 @@ void application::InitEntities(void)
 
 	AsteroidMesh = new Mesh("Models/Rock.obj");
 	AsteroidMesh->LoadTexture("Textures/RockTexture.bmp");
-	////glBindTexture();
-	//glBegin(GL_QUADS);
-	//
-	//
-	//glEnd;
 
 	for(int i=0; i<NumOfAsteroids; i++)
 	{
@@ -146,7 +154,7 @@ void application::InitEntities(void)
 	
 		x = rand() % 80 - 40; //random number between 0 and *number* minus *number*
 		y = (rand() % 40 - 40)+20;
-		z = -600 - (i * (20 - (rand() % 40)) / 20);
+		z = -800 - (i * (20 - (rand() % 40)) / 20);
 	
 		Asteroids = new Asteroid();
 		Asteroids->AttachMesh(AsteroidMesh);
@@ -165,6 +173,8 @@ void application::InitEntities(void)
 	Sun->AttachMesh(SunMesh);
 
 	lightpos = glm::vec3(0, -30, -410);
+
+	text = new Text();
 }
 
 void application::Update(float dt)
@@ -223,6 +233,7 @@ void application::Update(float dt)
 				if(BulletArray[i]->Collision(BulletArray[i]->getMin(), BulletArray[i]->getMax(), BulletArray[i]->GetPosition(), AsteroidArray[j]->getMin(), AsteroidArray[j]->getMax(), AsteroidArray[j]->GetPosition())==true)
 				{
 					std::cout << "Bullet Hit True" << std::endl;
+					Score+=10;
 					Hit = true;
 					AsteroidArray[j]->SetPosition(glm::vec3(rand() % 80 - 40, (rand() % 40 - 30)+10, AsteroidArray[j]->GetPosition().z-600));
 					AsteroidArray.erase(AsteroidArray.begin()+j);
@@ -239,12 +250,11 @@ void application::Update(float dt)
 		}
 	}
 
-	if(Lives<=0)
+	if(Lives<0)
 	{
 		Dead = true;
-		//Quit = true;
 	}
-	
+
 	camera->update(myPlayer->GetPosition(), 1.2f);
 }
 
@@ -254,6 +264,7 @@ void application::Draw(float dt)
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	// This writes the above colour to the colour part of the framebuffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	SDL_RenderClear(renderer2);
 
 	if(Dead==false)
 	{
@@ -270,15 +281,36 @@ void application::Draw(float dt)
 		{
 			BulletArray[i]->Draw(camera->getViewMatrix(), camera->getprojectionMatrix(), lightpos);
 		}
+
+		text->drawText("Score:" + std::to_string((long double)Score) + "			Lives:" + std::to_string((long double)Lives), 10, 10, renderer2, 2);
+		text->drawText("Avoid, or shoot, the asteroids or you'll lose a life", 10, 50, renderer2, 1);
+		text->drawText("Press Space to fire a bullet", 10, 70, renderer2, 1);
+		text->drawText("Use the Arrow (or WASD) keys to move the Death Star(TM)", 10, 90, renderer2, 1);
+		text->drawText("Press ESC to quit the game", 10, 90, renderer2, 1);
 	}
 	else if (Dead==true)
 	{
-
+		text->drawText("GAME OVER!!!", 10, 10, renderer2, 2);
+		text->drawText("Final Score: " + std::to_string((long double)Score), 10, 50, renderer2, 2);
+		
+		if(delay>100)
+		{
+			text->drawText("Press Space to Restart", 10, 100, renderer2, 1);
+			if(GameInput.isFireDown()==true)
+			{
+				Restart();
+			}
+		}
+		else
+		{
+			delay++;
+		}
 	}
 
 	// This tells the renderer to actually show its contents to the screen
 	// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P
 	SDL_GL_SwapWindow(window);
+	SDL_RenderPresent(renderer2);
 }
 
 void application::Run(void)
@@ -312,4 +344,24 @@ void application::Run(void)
 		Draw(deltaTs);
 	}
 	// If we get outside the main game loop, it means our user has requested we exit
+}
+
+void application::Restart(void)
+{
+	AsteroidArray.clear();
+	BulletArray.clear();
+	delete camera;
+	delete playerMesh;
+	delete myPlayer;
+	delete AsteroidMesh;
+	delete BulletMesh;
+	delete Sun;
+	delete SunMesh;
+	delete text;
+
+	delay = Score = 0;
+	Lives = 3;
+	Quit = Hit = Dead = false;
+
+	InitEntities();
 }

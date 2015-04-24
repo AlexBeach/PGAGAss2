@@ -19,9 +19,9 @@ struct Vertex {
 	int Normal;
 
 	Vertex() {
-		Position   = 0;
+		Position = 0;
 		TexCoord = 0;
-		Normal   = 0;
+		Normal = 0;
 	}
 };
 
@@ -65,5 +65,4 @@ private:
 	//reads a string like "3//5" and returns a VNP with 3 & 5 in it
 	Vertex ExtractFaceVertexData(std::string& s);
 };
-
 #endif
